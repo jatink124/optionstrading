@@ -41,7 +41,7 @@ const AdminNavbar = () => {
                Add Data Form
               </Link>
               <Link className="text-gray-700 hover:text-gray-900" to="admin/createcomponent">
-             Create Component
+             Create VK Levels
               </Link>
             </li>
           </ul>

@@ -15,7 +15,7 @@ function ImportantPoints() {
    
         <div className="mt-4">
           <h6>Current Date: {formattedDate}</h6>
-          <h4>Gap up Expected Due to Gift nifty, Check if coming from Resistance</h4>
+          <h4>Huge Downtrend Expected</h4>
         </div>
       
     </div>
