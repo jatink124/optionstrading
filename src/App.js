@@ -22,6 +22,7 @@ import TradingChecklist from './Components/TradingChecklist';
 import VkLevelsTable from './Components/VkLevelsTable';
 import ReadVKResistanceBaseLevels from './Crud/ReadVKResistanceBaseLevels';
 import DailyReport from './Components/DailyReport';
+import TradersDiary from './Components/TradersDiary';
 // import AdminDashboard from './Pages/AdminDashboard'; // Admin pages
 // import AdminUsers from './Pages/AdminUsers';
 // import AdminSettings from './Pages/AdminSettings';
@@ -44,7 +45,7 @@ function App() {
                   <Routes>
                     <Route path="/" element={<Mhome />} />
                     <Route path="/risk-reward" element={<RiskReward />} />
-                    <Route path="/multi-select" element={<MultiSelectDropdown />} />
+                   
                    
                     {/* <Route path="/createcomponent" element={<CreateComponent />} /> */}
                     <Route path="/tradingchecklist" element={<TradingChecklist />} />
@@ -69,6 +70,8 @@ function App() {
                     <Route path="/otreport" element={<DailyReport/>} /> 
                     <Route path="/createcomponent" element={<CreateComponent />} />
                     <Route path="/tradingjournal" element={<Tradingjournal />} />
+                    <Route path="/tradersdiary" element={<TradersDiary />} />
+                    <Route path="/multi-select" element={<MultiSelectDropdown />} />
                     {/* Add more admin routes as needed */}
                   </Routes>
                 </>

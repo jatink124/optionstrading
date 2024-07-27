@@ -1,6 +1,6 @@
-// src/Components/Navbar.js
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import './Navbar.css'; // Import the CSS file
 
 const Navbar = () => {
   return (
@@ -41,39 +41,30 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="text-gray-700 hover:text-gray-900" to="/multi-select">
-                Options
-              </Link>
-            </li>
-         
-            <li className="nav-item">
               <Link className="text-gray-700 hover:text-gray-900" to="/tradingchecklist">
                 Trading CheckList
               </Link>
             </li>
             <li className="nav-item">
               <Link className="text-gray-700 hover:text-gray-900" to="/vklevels">
-               Check VK levels
+                Check VK levels
               </Link>
             </li>
             <li className="nav-item">
               <Link className="text-gray-700 hover:text-gray-900" to="/marketpredictioninsights">
-              Market Prediction Insights
+                Market Prediction Insights
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="text-gray-700 hover:text-gray-900" to="/lessonslearnt">
+                Lessons Learnt
               </Link>
             </li>
             <li className="nav-item">
               <Link className="text-gray-700 hover:text-gray-900" to="/admin">
-            Login
+                Login
               </Link>
             </li>
-            {/* <li className="nav-item">
-            <Link className="text-gray-700 hover:text-gray-900" to="/adddataform">
-               Add Data Form
-              </Link>
-              <Link className="text-gray-700 hover:text-gray-900" to="/createcomponent">
-             Create Component
-              </Link>
-            </li> */}
           </ul>
         </div>
       </div>
