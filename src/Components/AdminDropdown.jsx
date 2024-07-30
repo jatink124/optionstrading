@@ -34,6 +34,12 @@ function AdminNavbar() {
       Daily OT Report
       </Link>
       <Link
+        to="/admin/dailylearningentries"
+        className="text-gray-700 hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+      >
+      Daily Learning
+      </Link>
+      <Link
         to="/admin/createcomponent"
         className="text-gray-700 hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
       >
@@ -50,6 +56,12 @@ function AdminNavbar() {
         className="text-gray-700 hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
       >
      Intraday Prediction
+      </Link>
+      <Link
+        to="/admin/websitelist"
+        className="text-gray-700 hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+      >
+     Website List
       </Link>
     </nav>
   );

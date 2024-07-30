@@ -1,7 +1,7 @@
 // src/Components/Navbar.js
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import './Navbar.css'; // Import the CSS file
 const AdminNavbar = () => {
   return (
     <nav className="bg-gray-100 border-b border-gray-200">

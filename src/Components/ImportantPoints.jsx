@@ -27,8 +27,8 @@ function ImportantPoints() {
           <tbody>
             <tr>
               <td className="border border-gray-600 px-4 py-2">Pakash Gaba</td>
-              <td className="border border-gray-600 px-4 py-2">if 24200 breaks then it will go downward,24500 is the only Resistance</td>
-              <td className="border border-gray-600 px-4 py-2">51300 is the Resistance,if 50600 breaks then 50000 is the next support </td>
+              <td className="border border-gray-600 px-4 py-2">if 24800 breaks then 24600 is the next good support.</td>
+              <td className="border border-gray-600 px-4 py-2">51100 is the strong support</td>
             </tr>
             {/* <tr>
               <td className="border border-gray-600 px-4 py-2">2</td>

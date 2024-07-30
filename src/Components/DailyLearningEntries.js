@@ -1,12 +1,14 @@
-// DailyReport.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import EntriesTable from './DailyReportenteriesTable';
+import DailyReportenteriesTable from './DailyReportenteriesTable';
+import DataEntryForm from './DataEntryForm';
 
-const DailyReport = () => {
+
+const DailyLearningEntries = () => {
   const [reportData, setReportData] = useState([]);
 
+  // Function to fetch report data
   const fetchReportData = () => {
     axios.get('http://localhost:5000/repdata')
       .then(response => {
@@ -17,16 +19,17 @@ const DailyReport = () => {
       });
   };
 
+  // Fetch data on component mount
   useEffect(() => {
     fetchReportData();
   }, []);
 
   return (
     <div>
-  
-      <EntriesTable reportData={reportData} />
+      <DataEntryForm onEntryAdded={fetchReportData} />
+ 
     </div>
   );
 };
 
-export default DailyReport;
+export default DailyLearningEntries;
