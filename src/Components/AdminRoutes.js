@@ -10,17 +10,20 @@ import MultiSelectDropdown from './MultiSelectDropdown';
 
 import DailyReportenteriesTable from './DailyReportenteriesTable';
 import DailyLearningEntries from './DailyLearningEntries';
+import DailyReportsubmit from './DailyReportsubmit';
+import EnterTradePredictions from './EnterTradePredictions';
 
 const AdminRoutes = () => (
   <>
     <AdminDropdown />
     <Routes>
-      <Route path="/otreport" element={<DailyReport />} />
+      {/* <Route path="/otreport" element={<DailyReportsubmit />} /> */}
       <Route path="/createcomponent" element={<CreateComponent />} />
       <Route path="/tradingjournal" element={<Tradingjournal />} />
       <Route path="/tradersdiary" element={<TradersDiary />} />
       <Route path="/multi-select" element={<MultiSelectDropdown />} />
       <Route path="/dailylearningentries" element={<DailyLearningEntries/>} />
+      <Route path="/entertradepredicitons" element={<EnterTradePredictions/>} />
     </Routes>
   </>
 );

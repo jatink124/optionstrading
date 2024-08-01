@@ -1,0 +1,51 @@
+/* Custom styles for animated input box */
+@keyframes focusIn {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  .input-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+  
+  .input-container label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: all 0.2s ease-in-out;
+    pointer-events: none;
+    color: #6b7280; /* Gray-500 */
+    transform-origin: top left;
+    transform: scale(0.75) translateY(-50%);
+    background-color: white;
+    padding: 0 4px;
+  }
+  
+  .input-container input {
+    width: 100%;
+    padding: 12px 12px 12px 0;
+    border: 1px solid #d1d5db; /* Gray-300 */
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .input-container input:focus {
+    border-color: #3b82f6; /* Blue-500 */
+    outline: none;
+    animation: focusIn 0.3s ease-out;
+  }
+  
+  .input-container input:focus + label,
+  .input-container input:not(:placeholder-shown) + label {
+    color: #3b82f6; /* Blue-500 */
+    transform: scale(0.75) translateY(-100%);
+  }
+  

@@ -27,12 +27,12 @@ function AdminNavbar() {
       >
       Trading Journal
       </Link>
-      <Link
+      {/* <Link
         to="/admin/otreport"
         className="text-gray-700 hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
       >
       Daily OT Report
-      </Link>
+      </Link> */}
       <Link
         to="/admin/dailylearningentries"
         className="text-gray-700 hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
@@ -44,6 +44,12 @@ function AdminNavbar() {
         className="text-gray-700 hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
       >
         Create VK Levels
+      </Link>
+      <Link
+        to="/admin/entertradepredicitons"
+        className="text-gray-700 hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+      >
+       Enter Trade Predictions
       </Link>
       <Link
         to="/admin/tradersdiary"
