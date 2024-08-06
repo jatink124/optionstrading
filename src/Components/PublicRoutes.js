@@ -9,6 +9,9 @@ import TradingChecklist from './TradingChecklist';
 import ReadVKResistanceBaseLevels from '../Crud/ReadVKResistanceBaseLevels';
 import ImportantPoints from './ImportantPoints';
 import DailyReport from './DailyReport';
+import Tutorials from './Tutotrials';
+import StrategyTable from './StrategyTable';
+import ReadStrategy from './ReadStrategy';
 
 const PublicRoutes = () => (
   <>
@@ -21,6 +24,8 @@ const PublicRoutes = () => (
       <Route path="/vklevels" element={<ReadVKResistanceBaseLevels />} />
       <Route path="/marketpredictioninsights" element={<ImportantPoints />} />
       <Route path="/lessonslearnt" element={<DailyReport/>} />
+      <Route path="/tutorials" element={<Tutorials/>} />
+    <Route path="/readstrategy" element={<ReadStrategy/>} />
       {/* Add more routes as needed */}
     </Routes>
   </>

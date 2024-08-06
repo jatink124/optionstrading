@@ -128,14 +128,13 @@ function EnterTradePredictions() {
             <label htmlFor="newNiftyPrediction">Nifty Prediction</label>
           </div>
           <div className="mb-4 input-container">
-            <input
+            <textarea
               id="newBankniftyPrediction"
               name="bankniftyPrediction"
-              type="text"
               placeholder=" "
               value={newPrediction.bankniftyPrediction || ''}
               onChange={handleNewPredictionChange}
-              className="mt-1 block w-full"
+              className="mt-1 block w-full resize-y"
               required
             />
             <label htmlFor="newBankniftyPrediction">Banknifty Prediction</label>
@@ -169,8 +168,8 @@ function EnterTradePredictions() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{prediction.index}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{prediction.tradeAnalystName}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{prediction.niftyPrediction}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{prediction.bankniftyPrediction}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 multiline text-lg text-gray-500">{prediction.bankniftyPrediction}</td>
+                  <td className="px-6 py-4 multiline text-lg text-gray-500">
                     <button 
                       className="text-blue-500 hover:text-blue-700 mr-2"
                       onClick={() => handleEditClick(prediction)}
@@ -221,18 +220,18 @@ function EnterTradePredictions() {
                   <label htmlFor="niftyPrediction">Nifty Prediction</label>
                 </div>
                 <div className="mb-4 input-container">
-                  <input
+                  <textarea
                     id="bankniftyPrediction"
                     name="bankniftyPrediction"
-                    type="text"
                     placeholder=" "
                     value={formData.bankniftyPrediction || ''}
                     onChange={handleInputChange}
-                    className="mt-1 block w-full"
+                    className="mt-1 block w-full resize-y"
                     required
                   />
                   <label htmlFor="bankniftyPrediction">Banknifty Prediction</label>
                 </div>
+
                 <button
                   type="submit"
                   className="bg-blue-500 text-white px-4 py-2 rounded-md"

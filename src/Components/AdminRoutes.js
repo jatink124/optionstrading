@@ -12,6 +12,7 @@ import DailyReportenteriesTable from './DailyReportenteriesTable';
 import DailyLearningEntries from './DailyLearningEntries';
 import DailyReportsubmit from './DailyReportsubmit';
 import EnterTradePredictions from './EnterTradePredictions';
+import StrategyTable from './StrategyTable';
 
 const AdminRoutes = () => (
   <>
@@ -24,6 +25,7 @@ const AdminRoutes = () => (
       <Route path="/multi-select" element={<MultiSelectDropdown />} />
       <Route path="/dailylearningentries" element={<DailyLearningEntries/>} />
       <Route path="/entertradepredicitons" element={<EnterTradePredictions/>} />
+      <Route path="/strategytable" element={<StrategyTable/>} />
     </Routes>
   </>
 );

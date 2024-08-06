@@ -61,6 +61,16 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="nav-item">
+              <Link className="text-gray-700 hover:text-gray-900" to="/tutorials">
+              Tutorials
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="text-gray-700 hover:text-gray-900" to="/readstrategy">
+            Read Strategy
+              </Link>
+            </li>
+            <li className="nav-item">
               <Link className="text-gray-700 hover:text-gray-900" to="/admin">
                 Login
               </Link>

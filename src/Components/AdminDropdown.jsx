@@ -64,9 +64,14 @@ function AdminNavbar() {
      Intraday Prediction
       </Link>
       <Link
+        to="/admin/strategytable"
+        className="text-gray-700 hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+      >Strategy Table</Link>
+      <Link
         to="/admin/websitelist"
         className="text-gray-700 hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
       >
+          
      Website List
       </Link>
     </nav>

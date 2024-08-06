@@ -48,8 +48,8 @@ function PredictionRead() {
               <tr key={prediction.index}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{prediction.index}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{prediction.tradeAnalystName}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{prediction.niftyPrediction}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{prediction.bankniftyPrediction}</td>
+                <td className="px-6 py-4 max-w-xs break-words text-lg text-black-500">{prediction.niftyPrediction}</td>
+                <td className="px-6 py-4 max-w-lg break-words text-lg text-black-500">{prediction.bankniftyPrediction}</td>
               </tr>
             ))}
           </tbody>
