@@ -8,7 +8,7 @@ const DailyReport = () => {
   const [reportData, setReportData] = useState([]);
 
   const fetchReportData = () => {
-    axios.get('http://localhost:5000/repdata')
+    axios.get('https://66bcb8a766193eb81bf3ef8d--verdant-daffodil-6da433.netlify.app/dailyreportdata')
       .then(response => {
         setReportData(response.data);
       })
