@@ -24,7 +24,7 @@ const fetchEntries = async () => {
 };
 
 const postEntry = async (entry) => {
-  await axios.post('https://crud1-xoqf.onrender.com/tradersdiary/tradersdiary', entry);
+  await axios.post('https://crud1-xoqf.onrender.com/tradersdiary', entry);
 };
 
 const TradersDiary = () => {
