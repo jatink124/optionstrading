@@ -6,9 +6,9 @@ import EntriesTable from './DailyReportenteriesTable';
 
 const DailyReport = () => {
   const [reportData, setReportData] = useState([]);
-  const apiUrl = process.env.REACT_APP_API_BASE_URL;
+  // const apiUrl = process.env.REACT_APP_API_BASE_URL;
   const fetchReportData = () => {
-    axios.get('${apiUrl}/dailyreportdata.json')
+    axios.get('api/dailyreportdata.json')
       .then(response => {
         setReportData(response.data);
       })
