@@ -8,7 +8,7 @@ const DailyReport = () => {
   const [reportData, setReportData] = useState([]);
   // const apiUrl = process.env.REACT_APP_API_BASE_URL;
   const fetchReportData = () => {
-    axios.get('api/dailyreportdata.json')
+    axios.get('/dailyreportdata.json')
       .then(response => {
         setReportData(response.data);
       })

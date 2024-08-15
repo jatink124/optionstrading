@@ -10,7 +10,7 @@ const DailyLearningEntries = () => {
 
   // Function to fetch report data
   const fetchReportData = () => {
-    axios.get('api/repdata')
+    axios.get('/repdata')
       .then(response => {
         setReportData(response.data);
       })
