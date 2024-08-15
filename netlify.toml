@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "https://lighthearted-gingersnap-2b6482.netlify.app/marketpredictioninsights"
+  to = "https://crud1-xoqf.onrender.com/api/predictions"
+  status = 200
+  force = true

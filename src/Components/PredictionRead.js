@@ -3,7 +3,8 @@ import axios from 'axios';
 
 // API Function
 const fetchPredictions = async () => {
-  const response = await axios.get('http://localhost:5000/api/predictions');
+  // const response = await axios.get('http://localhost:5000/api/predictions');
+  const response = await axios.get('https://crud1-xoqf.onrender.com/api/predictions');
   return response.data;
 };
 

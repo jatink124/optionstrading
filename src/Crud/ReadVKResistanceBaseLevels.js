@@ -7,7 +7,8 @@ const ReadVKResistanceBaseLevels = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/data');
+        const response = await axios.get('https://crud1-xoqf.onrender.com/data');
+        // const response = await axios.get('http://localhost:5000/data');
         setData(response.data);
       } catch (error) {
         console.error('There was an error fetching the data:', error);
