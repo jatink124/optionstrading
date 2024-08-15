@@ -23,7 +23,7 @@ const DataEntryForm = ({ onEntryAdded }) => {
     setLoading(true);
     setError('');
 
-    axios.post('api/repdata', formData)
+    axios.post('/repdata', formData)
       .then(response => {
         console.log('Data added:', response.data);
         setFormData({
