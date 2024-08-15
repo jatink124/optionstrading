@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 
 app.use('/api', strategyRouter);
 app.use('/api', predictionsRoutes);
-
+const repFilePath = path.join(__dirname, 'dailyreportdata.json');
 // Helper function to read data from file
 const readData = (filePath) => {
   const data = fs.readFileSync(filePath);
