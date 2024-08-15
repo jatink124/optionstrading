@@ -19,12 +19,12 @@ import {
 import ReadTradersDiary from './ReadTradersDiary';
 
 const fetchEntries = async () => {
-  const response = await axios.get('http://localhost:5000/tradersdiary');
+  const response = await axios.get('https://crud1-xoqf.onrender.com/tradersdiary');
   return response.data;
 };
 
 const postEntry = async (entry) => {
-  await axios.post('http://localhost:5000/tradersdiary', entry);
+  await axios.post('https://crud1-xoqf.onrender.com/tradersdiary/tradersdiary', entry);
 };
 
 const TradersDiary = () => {
