@@ -27,6 +27,7 @@
     "tailwindcss": "^3.4.4",
     "web-vitals": "^2.1.4"
   },
+  "proxy": "https://66bcb8a766193eb81bf3ef8d--verdant-daffodil-6da433.netlify.app/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -50,6 +51,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://localhost:3000"
+  }
+  
 }
