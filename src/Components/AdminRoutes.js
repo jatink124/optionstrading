@@ -13,7 +13,8 @@ import DailyLearningEntries from './DailyLearningEntries';
 import DailyReportsubmit from './DailyReportsubmit';
 import EnterTradePredictions from './EnterTradePredictions';
 import StrategyTable from './StrategyTable';
-
+import WebsiteList from './utils/WebsiteList';
+import { websites } from './utils//websitesData';  // Ensure this path is correct
 const AdminRoutes = () => (
   <>
     <AdminDropdown />
@@ -26,6 +27,7 @@ const AdminRoutes = () => (
       <Route path="/dailylearningentries" element={<DailyLearningEntries/>} />
       <Route path="/entertradepredicitons" element={<EnterTradePredictions/>} />
       <Route path="/strategytable" element={<StrategyTable/>} />
+      <Route path="/websitelist" element={<WebsiteList websites={websites} />} />
     </Routes>
   </>
 );
