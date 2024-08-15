@@ -7,7 +7,7 @@ const ReadVKResistanceBaseLevels = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/data');
+        const response = await axios.get('/data');
         setData(response.data);
       } catch (error) {
         console.error('There was an error fetching the data:', error);
