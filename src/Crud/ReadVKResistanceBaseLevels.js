@@ -4,7 +4,7 @@ import axios from 'axios';
 
 // Function to fetch data
 const fetchData = async () => {
-  const response = await axios.get('http://localhost:5000/data');
+  const response = await axios.get('https://crud1-xoqf.onrender.com/data');
   return response.data;
 };
 
