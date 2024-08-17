@@ -34,7 +34,7 @@ const Tradingjournal = () => {
   }, [formData]); // Run this effect whenever formData changes
   const handleSubmit = async (e) => {
     e.preventDefault();
-  debugger;
+  
     // Perform calculation based on conditions
     const entryPrice = parseFloat(formData.entryPrice);
     const exitPrice = parseFloat(formData.exitPrice);
@@ -49,9 +49,9 @@ const Tradingjournal = () => {
       // Default multiplier if assetType is neither 'banknifty' nor 'nifty'
       multiplier = 1;
     }
-  debugger;
+
     const profitLoss = ((exitPrice - entryPrice) * multiplier )-49;
-   debugger;
+ 
     const profitLossString = profitLoss < 0 ? 'Loss' : 'Profit';
    // Update the state with the calculated profit/loss and profit/loss string
   setFormData((prevData) => ({

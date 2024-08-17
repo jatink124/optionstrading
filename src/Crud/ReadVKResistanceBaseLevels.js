@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
+// Function to fetch data
+const fetchData = async () => {
+  const response = await axios.get('http://localhost:5000/data');
+  return response.data;
+};
+
 const ReadVKResistanceBaseLevels = () => {
-  const [data, setData] = useState([]);
+  // Use React Query to fetch data
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['data'],
+    queryFn: fetchData,
+    // Optionally, you can add refetchInterval to automatically refresh data at a given interval
+    // refetchInterval: 60000 // refetch every 60 seconds
+  });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('https://crud1-xoqf.onrender.com/data');
-        // const response = await axios.get('http://localhost:5000/data');
-        setData(response.data);
-      } catch (error) {
-        console.error('There was an error fetching the data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error fetching data: {error.message}</p>;
 
   return (
     <div className="container mx-auto mt-4">
