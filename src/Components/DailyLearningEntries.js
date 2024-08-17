@@ -10,7 +10,7 @@ const DailyLearningEntries = () => {
 
   // Function to fetch report data
   const fetchReportData = () => {
-    axios.get('/repdata')
+    axios.get('https://crud1-xoqf.onrender.com/repdata')
       .then(response => {
         setReportData(response.data);
       })

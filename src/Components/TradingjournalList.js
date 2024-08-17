@@ -4,25 +4,97 @@ const TradingJournalList = () => {
   const [tradingJournals, setTradingJournals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isEditing, setIsEditing] = useState(null);
+  const [editFormData, setEditFormData] = useState({
+    dateTime: '',
+    assetType: '',
+    optionType: '',
+    entryPrice: '',
+    exitPrice: '',
+    strategy: '',
+    reasonForEntry: '',
+    contractSize: '',
+    profitLoss: '',
+    comments: ''
+  });
 
   useEffect(() => {
-    const fetchTradingJournals = async () => {
-      try {
-        const response = await fetch('https://crud1-xoqf.onrender.com/api/tradingjournals');
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-        setTradingJournals(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchTradingJournals();
   }, []);
+
+  const fetchTradingJournals = async () => {
+    try {
+      const response = await fetch('https://crud1-xoqf.onrender.com/api/tradingjournals');
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      const data = await response.json();
+      setTradingJournals(data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleEditClick = (entry) => {
+    const formattedDate = entry.dateTime ? new Date(entry.dateTime).toISOString().slice(0, 16) : '';
+    
+    setIsEditing(entry.id);
+    setEditFormData({
+      dateTime: formattedDate,
+      assetType: entry.assetType || '',
+      optionType: entry.optionType || '',
+      entryPrice: entry.entryPrice || '',
+      exitPrice: entry.exitPrice || '',
+      strategy: entry.strategy || '',
+      reasonForEntry: entry.reasonForEntry || '',
+      contractSize: entry.contractSize || '',
+      profitLoss: entry.profitLoss || '',
+      comments: entry.comments || ''
+    });
+  };
+  
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData({ ...editFormData, [name]: value });
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`https://crud1-xoqf.onrender.com/api/tradingjournals/${isEditing}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editFormData),
+      });
+      if (response.ok) {
+        fetchTradingJournals();
+        setIsEditing(null);
+      } else {
+        throw new Error('Failed to update entry');
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleDeleteClick = async (id) => {
+    try {
+      const response = await fetch(`https://crud1-xoqf.onrender.com/api/tradingjournals/${id}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        fetchTradingJournals();
+      } else {
+        throw new Error('Failed to delete entry');
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -48,29 +120,62 @@ const TradingJournalList = () => {
             <th>Contract Size</th>
             <th>Profit/Loss</th>
             <th>Comments</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {tradingJournals.length > 0 ? (
             tradingJournals.map((entry) => (
               <tr key={entry.id}>
-                <td>{new Date(entry.dateTime).toLocaleString()}</td>
-                <td>{entry.assetType}</td>
-                <td>{entry.optionType}</td>
-                <td>{entry.entryPrice}</td>
-                <td>{entry.exitPrice}</td>
-                <td>{entry.strategy}</td>
-                <td>{entry.reasonForEntry}</td>
-                <td>{entry.contractSize}</td>
-                <td className={entry.profitLossString === 'Profit' ? 'text-success' : 'text-danger'}>
-                  {entry.profitLoss} ({entry.profitLossString})
-                </td>
-                <td>{entry.comments}</td>
+                {isEditing === entry.id ? (
+                  <>
+                    <td>
+                      <input
+                        type="datetime-local"
+                        name="dateTime"
+                        value={editFormData.dateTime}
+                        onChange={handleEditChange}
+                      />
+                    </td>
+                    <td><input type="text" name="assetType" value={editFormData.assetType} onChange={handleEditChange} /></td>
+                    <td><input type="text" name="optionType" value={editFormData.optionType} onChange={handleEditChange} /></td>
+                    <td><input type="number" name="entryPrice" value={editFormData.entryPrice} onChange={handleEditChange} /></td>
+                    <td><input type="number" name="exitPrice" value={editFormData.exitPrice} onChange={handleEditChange} /></td>
+                    <td><input type="text" name="strategy" value={editFormData.strategy} onChange={handleEditChange} /></td>
+                    <td><input type="text" name="reasonForEntry" value={editFormData.reasonForEntry} onChange={handleEditChange} /></td>
+                    <td><input type="number" name="contractSize" value={editFormData.contractSize} onChange={handleEditChange} /></td>
+                    <td><input type="number" name="profitLoss" value={editFormData.profitLoss} onChange={handleEditChange} /></td>
+                    <td><input type="text" name="comments" value={editFormData.comments} onChange={handleEditChange} /></td>
+                    <td>
+                      <button className="btn btn-success" onClick={handleEditSubmit}>Save</button>
+                      <button className="btn btn-secondary" onClick={() => setIsEditing(null)}>Cancel</button>
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <td>{new Date(entry.dateTime).toLocaleString()}</td>
+                    <td>{entry.assetType}</td>
+                    <td>{entry.optionType}</td>
+                    <td>{entry.entryPrice}</td>
+                    <td>{entry.exitPrice}</td>
+                    <td>{entry.strategy}</td>
+                    <td>{entry.reasonForEntry}</td>
+                    <td>{entry.contractSize}</td>
+                    <td className={entry.profitLossString === 'Profit' ? 'text-success' : 'text-danger'}>
+                      {entry.profitLoss} ({entry.profitLossString})
+                    </td>
+                    <td>{entry.comments}</td>
+                    <td>
+                      <button className="btn btn-primary" onClick={() => handleEditClick(entry)}>Edit</button>
+                      <button className="btn btn-danger" onClick={() => handleDeleteClick(entry.id)}>Delete</button>
+                    </td>
+                  </>
+                )}
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="10">No entries found</td>
+              <td colSpan="11">No entries found</td>
             </tr>
           )}
         </tbody>
