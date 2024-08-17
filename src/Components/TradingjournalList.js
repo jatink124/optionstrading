@@ -8,7 +8,7 @@ const TradingJournalList = () => {
   useEffect(() => {
     const fetchTradingJournals = async () => {
       try {
-        const response = await fetch('https://crud1-xoqf.onrender.com/tradingjournals');
+        const response = await fetch('https://crud1-xoqf.onrender.com/api/tradingjournals');
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }

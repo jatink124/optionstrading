@@ -78,7 +78,7 @@ const Tradingjournal = () => {
     };
 
     try {
-      const response = await fetch('https://crud1-xoqf.onrender.com/tradingjournals', {
+      const response = await fetch('https://crud1-xoqf.onrender.com/api/tradingjournals', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
