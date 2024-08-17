@@ -1,13 +1,16 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Tradingjournaltable from './Tradingjournaltable';
+import Tradingjournaltable from './TradingjournalList';
 import Authentication from './Authentication';
+import TradingJournalList from './TradingjournalList';
+
 const Tradingjournal = () => {
   const [authenticated, setAuthenticated] = useState(false);
 
   const handleAuthentication = (isAuthenticated) => {
     setAuthenticated(isAuthenticated);
   };
+
   const [formData, setFormData] = useState({
     dateTime: '',
     assetType: '',
@@ -15,10 +18,10 @@ const Tradingjournal = () => {
     entryPrice: '',
     exitPrice: '',
     strategy: '',
-    reasonforentry: '',
+    reasonForEntry: '',
     contractSize: '',
     profitLoss: '',
-    profitLossString:'',
+    profitLossString: '',
     comments: '',
   });
 
@@ -28,14 +31,15 @@ const Tradingjournal = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
+
   useEffect(() => {
-    // Log the updated state after it has been updated
- 
-  }, [formData]); // Run this effect whenever formData changes
+    // Optional: Log the updated state for debugging purposes
+  }, [formData]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Perform calculation based on conditions
+    // Perform profit/loss calculation
     const entryPrice = parseFloat(formData.entryPrice);
     const exitPrice = parseFloat(formData.exitPrice);
     const contractSize = parseInt(formData.contractSize);
@@ -46,24 +50,19 @@ const Tradingjournal = () => {
     } else if (formData.assetType === 'nifty') {
       multiplier = 100;
     } else {
-      // Default multiplier if assetType is neither 'banknifty' nor 'nifty'
       multiplier = 1;
     }
 
-    const profitLoss = ((exitPrice - entryPrice) * multiplier )-49;
- 
+    const profitLoss = ((exitPrice - entryPrice) * multiplier) - 49;
     const profitLossString = profitLoss < 0 ? 'Loss' : 'Profit';
-   // Update the state with the calculated profit/loss and profit/loss string
-  setFormData((prevData) => ({
-    ...prevData,
-    profitLoss: profitLoss.toFixed(2),
-    profitLossString,
-   
-  }));
 
-    
-  
-    // Prepare data to be sent to the PHP backend
+    setFormData((prevData) => ({
+      ...prevData,
+      profitLoss: profitLoss.toFixed(2),
+      profitLossString,
+    }));
+
+    // Prepare data for API request
     const requestData = {
       dateTime: formData.dateTime,
       assetType: formData.assetType,
@@ -71,50 +70,46 @@ const Tradingjournal = () => {
       entryPrice: formData.entryPrice,
       exitPrice: formData.exitPrice,
       strategy: formData.strategy,
-      reasonForEntry: formData.reasonforentry,
+      reasonForEntry: formData.reasonForEntry,
       contractSize: formData.contractSize,
       profitLoss: profitLoss.toFixed(2),
       comments: formData.comments,
-      pls:profitLossString,
+      profitLossString,
     };
- 
+
     try {
-      const response = await fetch('http://localhost/php-react-admin/addtradingjournal.php', {
+      const response = await fetch('https://crud1-xoqf.onrender.com/tradingjournals', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(requestData),
       });
-  
+
       if (response.ok) {
         const result = await response.json();
         console.log(result);
         // Handle successful response from the backend
-          // Reset all variables after successful submission
-      setFormData({
-        dateTime: '',
-        assetType: '',
-        optionType: '',
-        entryPrice: '',
-        exitPrice: '',
-        strategy: '',
-        reasonForEntry: '',
-        contractSize: '',
-        profitLoss: '',
-        comments: '',
-        profitLossString: '',
-      });
+        setFormData({
+          dateTime: '',
+          assetType: '',
+          optionType: '',
+          entryPrice: '',
+          exitPrice: '',
+          strategy: '',
+          reasonForEntry: '',
+          contractSize: '',
+          profitLoss: '',
+          comments: '',
+          profitLossString: '',
+        });
       } else {
         console.error('Failed to send data to the backend');
-        // Handle error response from the backend
       }
     } catch (error) {
       console.error('Error occurred while sending data to the backend', error);
-      // Handle network or other errors
     }
   };
-  
 
   return (
     <div className="container mt-5">
@@ -133,7 +128,7 @@ const Tradingjournal = () => {
               required
             />
           </div>
-        
+
           <div className={inputClass}>
             <label htmlFor="assetType" className="form-label">Underlying Asset</label>
             <select
@@ -201,19 +196,19 @@ const Tradingjournal = () => {
             />
           </div>
           <div className={inputClass}>
-            <label htmlFor="reasonforentry" className="form-label">Reason For Entry</label>
+            <label htmlFor="reasonForEntry" className="form-label">Reason For Entry</label>
             <input
               type="text"
               className="form-control"
-              id="reasonforentry"
-              name="reasonforentry"
-              value={formData.reasonforentry}
+              id="reasonForEntry"
+              name="reasonForEntry"
+              value={formData.reasonForEntry}
               onChange={handleChange}
               required
             />
           </div>
           <div className={inputClass}>
-            <label htmlFor="optionType" className="form-label">Underlying Asset</label>
+            <label htmlFor="contractSize" className="form-label">Contract Size</label>
             <select
               className="form-control"
               id="contractSize"
@@ -223,34 +218,25 @@ const Tradingjournal = () => {
               required
             >
               <option value="">Select Lot</option>
-              <option value="1lot">1lot</option>
-              <option value="2lot">2lot</option>
-              <option value="3lot">3lot</option>
+              <option value="1lot">1 lot</option>
+              <option value="2lot">2 lots</option>
+              <option value="3lot">3 lots</option>
             </select>
           </div>
-         
         </div>
-
-    
-     
-          {/* Continue adding input fields for other form elements similarly */}
-    
 
         <button type="submit" className="btn btn-primary">Submit</button>
       </form>
       <div className="container mt-5">
-      {!authenticated ? (
-        // Show Authentication component if not authenticated
-        <Authentication onAuthentication={handleAuthentication} />
-      ) : (
-        // Show Tradingjournaltable component if authenticated
-        <>
-          <h2>Options Trading Form</h2>
-          {/* The rest of your form goes here */}
-          <Tradingjournaltable />
-        </>
-      )}
-    </div>
+        {!authenticated ? (
+          <Authentication onAuthentication={handleAuthentication} />
+        ) : (
+          <>
+            <h2>Options Trading Form</h2>
+            <TradingJournalList/>
+          </>
+        )}
+      </div>
     </div>
   );
 };
