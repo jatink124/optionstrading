@@ -8,7 +8,8 @@ const ReadStrategy = () => {
   useEffect(() => {
     const fetchStrategies = async () => {
       try {
-        const response = await axios.get('https://crud-46zy.onrender.com/api/strategies');
+        const response = await axios.get('https://crud1-xoqf.onrender.com/api/strategies');
+        // https://crud1-xoqf.onrender.com/api/strategies
        
         setStrategies(response.data);
       } catch (error) {

@@ -11,6 +11,7 @@ const StrategyTable = () => {
     const fetchStrategies = async () => {
       try {
         const response = await axios.get('https://crud1-xoqf.onrender.com/api/strategies');
+       debugger;
         setStrategies(response.data);
       } catch (error) {
         console.error('Error fetching strategies:', error);
