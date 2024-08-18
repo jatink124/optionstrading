@@ -8,8 +8,9 @@ const DailyReport = () => {
   const [reportData, setReportData] = useState([]);
   // const apiUrl = process.env.REACT_APP_API_BASE_URL;
   const fetchReportData = () => {
-    axios.get('https://crud1-xoqf.onrender.com/repdata')
+    axios.get('https://crud-46zy.onrender.com/repdata')
       .then(response => {
+    
         setReportData(response.data);
       })
       .catch(error => {

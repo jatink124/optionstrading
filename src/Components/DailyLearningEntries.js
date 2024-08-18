@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import DailyReportenteriesTable from './DailyReportenteriesTable';
 import DataEntryForm from './DataEntryForm';
+import DataDisplay from './DataDisplay';
 
 
 const DailyLearningEntries = () => {
@@ -27,7 +28,7 @@ const DailyLearningEntries = () => {
   return (
     <div>
       <DataEntryForm onEntryAdded={fetchReportData} />
- 
+ <DataDisplay/>
     </div>
   );
 };

@@ -16,7 +16,7 @@ import ReadStrategy from './ReadStrategy';
 const PublicRoutes = () => (
   <>
     <Navbar />
-    <ProfitLossDisplay />
+    {/* <ProfitLossDisplay /> */}
     <Routes>
       <Route path="/" element={<Mhome />} />
       <Route path="/risk-reward" element={<RiskReward />} />

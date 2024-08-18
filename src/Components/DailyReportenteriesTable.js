@@ -3,6 +3,9 @@ import React from 'react';
 
 // Function to parse the recommendations into an array of objects with title and description
 const parseRecommendations = (text) => {
+  // If text is undefined or empty, return an empty array
+  if (!text) return [];
+
   // Split the recommendations string by double new lines to separate each item
   const items = text.split('\n\n');
   
