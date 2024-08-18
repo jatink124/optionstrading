@@ -23,7 +23,7 @@ const DataEntryForm = ({ onEntryAdded }) => {
     setLoading(true);
     setError('');
 
-    axios.post('https://crud-46zy.onrender.com/repdata', formData)
+    axios.post('https://crud1-xoqf.onrender.com/repdata', formData)
       .then(response => {
         console.log('Data added:', response.data);
         setFormData({
