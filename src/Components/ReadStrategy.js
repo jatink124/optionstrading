@@ -8,8 +8,8 @@ const ReadStrategy = () => {
   useEffect(() => {
     const fetchStrategies = async () => {
       try {
-        const response = await axios.get('http://localhost5000/api/strategies');
-       debugger;
+        const response = await axios.get('https://crud-46zy.onrender.com/api/strategies');
+       
         setStrategies(response.data);
       } catch (error) {
         console.error('Error fetching strategies:', error);
