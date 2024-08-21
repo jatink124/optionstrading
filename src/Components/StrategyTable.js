@@ -1,17 +1,18 @@
-// src/components/StrategyTable.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Modal from './Modal';  // Import your Modal component at the top level
 
 const StrategyTable = () => {
   const [strategies, setStrategies] = useState([]);
   const [newStrategy, setNewStrategy] = useState({ todaysStrategy: '', thingsToDo: '' });
   const [editingStrategy, setEditingStrategy] = useState(null);
+  const [taskStatuses, setTaskStatuses] = useState({});
+  const [selectedStrategy, setSelectedStrategy] = useState(null);
 
   useEffect(() => {
     const fetchStrategies = async () => {
       try {
         const response = await axios.get('https://crud1-xoqf.onrender.com/api/strategies');
-       debugger;
         setStrategies(response.data);
       } catch (error) {
         console.error('Error fetching strategies:', error);
@@ -52,6 +53,28 @@ const StrategyTable = () => {
     }
   };
 
+  const handleTaskStatusChange = (strategyId, taskIndex) => {
+    setTaskStatuses(prev => ({
+      ...prev,
+      [strategyId]: {
+        ...prev[strategyId],
+        [taskIndex]: !prev[strategyId]?.[taskIndex]
+      }
+    }));
+  };
+
+  const splitTasks = (thingsToDo) => {
+    return thingsToDo.split(/\d+\.\s*/).filter(task => task.trim() !== "");
+  };
+
+  const openModal = (strategy) => {
+    setSelectedStrategy(strategy);
+  };
+
+  const closeModal = () => {
+    setSelectedStrategy(null);
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Strategies</h1>
@@ -84,16 +107,27 @@ const StrategyTable = () => {
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Today's Strategy</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">List of Things to Do</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tasks</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {strategies.map((strategy) => (
             <tr key={strategy.id}>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{strategy.id}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{strategy.todaysStrategy}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{strategy.thingsToDo}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                {strategy.id}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {strategy.todaysStrategy}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <button
+                  onClick={() => openModal(strategy)}
+                  className="bg-blue-500 text-white p-1"
+                >
+                  View Tasks
+                </button>
+              </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <button
                   onClick={() => handleDeleteStrategy(strategy.id)}
@@ -112,6 +146,27 @@ const StrategyTable = () => {
           ))}
         </tbody>
       </table>
+
+      {selectedStrategy && (
+        <Modal onClose={closeModal}>
+          <h2 className="text-xl font-bold mb-4">Tasks for {selectedStrategy.todaysStrategy}</h2>
+          <ul className="mb-4">
+            {splitTasks(selectedStrategy.thingsToDo).map((task, index) => (
+              <li key={index} className="flex items-center mb-2">
+                <span className="mr-2">{task}</span>
+                <input
+                  type="checkbox"
+                  checked={taskStatuses[selectedStrategy.id]?.[index] || false}
+                  onChange={() => handleTaskStatusChange(selectedStrategy.id, index)}
+                />
+              </li>
+            ))}
+          </ul>
+          <button onClick={closeModal} className="bg-gray-500 text-white p-2">
+            Close
+          </button>
+        </Modal>
+      )}
 
       {editingStrategy && (
         <div className="mt-4 p-4 border border-gray-200 rounded">
