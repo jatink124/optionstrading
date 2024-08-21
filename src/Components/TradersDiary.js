@@ -1,216 +1,175 @@
-import React, { useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell
-} from 'recharts';
-import ReadTradersDiary from './ReadTradersDiary';
+import React, { useEffect, useState } from 'react';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, LineElement, PointElement } from 'chart.js';
 
-const fetchEntries = async () => {
-  const response = await axios.get('https://crud1-xoqf.onrender.com/tradersdiary');
-  return response.data;
-};
-
-const postEntry = async (entry) => {
-  await axios.post('https://crud1-xoqf.onrender.com/tradersdiary', entry);
-};
+ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend);
 
 const TradersDiary = () => {
-  const [formData, setFormData] = useState({
-    tradeDay: '',
-    numberOfTrades: '',
-    overallPL: '',
-    netPL: '',
-    status: ''
-  });
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
 
-  const queryClient = useQueryClient();
-  const { data: entries, isLoading, isError, error } = useQuery({
-    queryKey: ['entries'],
-    queryFn: fetchEntries
-  });
+  useEffect(() => {
+    fetch('/tradersDiary.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => setData(data))
+      .catch(error => setError(error));
+  }, []);
 
-  const mutation = useMutation({
-    mutationFn: postEntry,
-    onSuccess: () => {
-      queryClient.invalidateQueries(['entries']);
-      setFormData({
-        tradeDay: '',
-        numberOfTrades: '',
-        overallPL: '',
-        netPL: '',
-        status: ''
-      });
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
+  const groupedData = (data) => {
+    let grouped = {};
+
+    for (const month in data) {
+      const monthData = data[month];
+      if (Array.isArray(monthData)) {
+        grouped[month] = monthData;
+      } else if (monthData.Trades) {
+        grouped[month] = monthData.Trades;
+      }
     }
-  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    return grouped;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    mutation.mutate(formData);
+  const groupedEntries = groupedData(data);
+
+  const chartData = (month) => {
+    const entries = groupedEntries[month];
+    const labels = entries.map(entry => entry["Trade Day"]);
+    const overallPL = entries.map(entry => parseFloat(entry["Overall P&L"].replace('₹ ', '').replace(',', '')));
+    const netPL = entries.map(entry => parseFloat(entry["Net P&L"].replace('₹ ', '').replace(',', '')));
+    const numberOfTrades = entries.map(entry => entry["No. of Trades"]);
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'Overall P&L',
+          data: overallPL,
+          type: 'line',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1,
+          yAxisID: 'y1',
+        },
+        {
+          label: 'Net P&L',
+          data: netPL,
+          type: 'line',
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1,
+          yAxisID: 'y1',
+        },
+        {
+          label: 'No. of Trades',
+          data: numberOfTrades,
+          type: 'bar',
+          backgroundColor: 'rgba(255, 159, 64, 0.2)',
+          borderColor: 'rgba(255, 159, 64, 1)',
+          borderWidth: 1,
+          yAxisID: 'y0',
+        },
+      ],
+    };
   };
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p className="text-red-500">{error.message}</p>;
-
-  const chartData = entries.map(entry => ({
-    tradeDay: entry.tradeDay,
-    overallPL: parseFloat(entry.overallPL),
-    netPL: parseFloat(entry.netPL),
-    numberOfTrades: parseInt(entry.numberOfTrades, 10)
-  }));
-
-  const pieData = [
-    { name: 'Overall P&L', value: chartData.reduce((sum, entry) => sum + entry.overallPL, 0) },
-    { name: 'Net P&L', value: chartData.reduce((sum, entry) => sum + entry.netPL, 0) }
-  ];
-
-  const COLORS = ['#0088FE', '#00C49F'];
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            if (context.dataset.label === 'No. of Trades') {
+              return `${context.dataset.label}: ${context.raw}`;
+            } else {
+              return `${context.dataset.label}: ₹ ${context.raw.toFixed(2)}`;
+            }
+          },
+        },
+      },
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Trade Day',
+        },
+      },
+      y0: {
+        type: 'linear',
+        position: 'left',
+        title: {
+          display: true,
+          text: 'Number of Trades',
+        },
+        beginAtZero: true,
+      },
+      y1: {
+        type: 'linear',
+        position: 'right',
+        title: {
+          display: true,
+          text: 'P&L',
+        },
+        beginAtZero: true,
+      },
+    },
+  };
 
   return (
-    <div>
-      <div className="container mx-auto p-4">
-        <h2 className="text-xl font-bold mb-4">Add New Entry</h2>
-        <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-4">
-          <div className="flex flex-col">
-            <label htmlFor="tradeDay" className="mb-1">Trade Day:</label>
-            <input
-              id="tradeDay"
-              type="date"
-              name="tradeDay"
-              value={formData.tradeDay}
-              onChange={handleChange}
-              className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500"
-              required
-            />
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="numberOfTrades" className="mb-1">Number of Trades:</label>
-            <input
-              id="numberOfTrades"
-              type="text"
-              name="numberOfTrades"
-              value={formData.numberOfTrades}
-              onChange={handleChange}
-              className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500"
-              required
-            />
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="overallPL" className="mb-1">Overall P&L:</label>
-            <input
-              id="overallPL"
-              type="text"
-              name="overallPL"
-              value={formData.overallPL}
-              onChange={handleChange}
-              className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500"
-              required
-            />
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="netPL" className="mb-1">Net P&L:</label>
-            <input
-              id="netPL"
-              type="text"
-              name="netPL"
-              value={formData.netPL}
-              onChange={handleChange}
-              className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500"
-              required
-            />
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="status" className="mb-1">Status:</label>
-            <input
-              id="status"
-              type="text"
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-              className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500"
-              required
-            />
-          </div>
-          <button type="submit" className="bg-blue-500 text-white px-2 py-2 rounded-md col-span-2 hover:bg-blue-600 transition duration-200" disabled={mutation.isLoading}>
-            {mutation.isLoading ? 'Processing...' : 'Add Entry'}
-          </button>
-        </form>
-        {mutation.isError && <p className="text-red-500 mt-2">{mutation.error.message}</p>}
-      </div>
+    <div className="container mx-auto p-4">
+      <h2 className="text-xl font-bold mb-4">Traders Diary Entries</h2>
+      {Object.keys(groupedEntries).map(month => (
+        <div key={month} className="mb-8">
+          <h3 className="text-lg font-semibold mb-2">{month}</h3>
 
-      <div className="container mx-auto p-4">
-        <h2 className="text-xl font-bold mb-4">Performance Charts</h2>
-        <p className="mb-4">The charts below compare the Overall P&L, Net P&L, and Number of Trades for each trade day.</p>
-        
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="tradeDay" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="overallPL" stroke="#8884d8" name="Overall P&L" />
-            <Line type="monotone" dataKey="netPL" stroke="#82ca9d" name="Net P&L" />
-            <Line type="monotone" dataKey="numberOfTrades" stroke="#ff7300" name="Number of Trades" />
-          </LineChart>
-        </ResponsiveContainer>
+          <Bar
+            data={chartData(month)}
+            options={chartOptions}
+          />
 
-        <ResponsiveContainer width="100%" height={400} className="mt-8">
-          <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="tradeDay" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="overallPL" fill="#8884d8" name="Overall P&L" />
-            <Bar dataKey="netPL" fill="#82ca9d" name="Net P&L" />
-            <Bar dataKey="numberOfTrades" fill="#ff7300" name="Number of Trades" />
-          </BarChart>
-        </ResponsiveContainer>
-
-        <ResponsiveContainer width="100%" height={400} className="mt-8">
-          <PieChart>
-            <Tooltip />
-            <Legend />
-            <Pie
-              data={pieData}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              outerRadius={150}
-              fill="#8884d8"
-              label
-            >
-              {pieData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          <table className="min-w-full bg-white border border-gray-200 mt-4">
+            <thead>
+              <tr>
+                <th className="py-2 border-b">Trade Day</th>
+                <th className="py-2 border-b">No. of Trades</th>
+                <th className="py-2 border-b">Overall P&L</th>
+                <th className="py-2 border-b">Net P&L</th>
+                <th className="py-2 border-b">Status</th>
+                <th className="py-2 border-b">Transaction</th>
+              </tr>
+            </thead>
+            <tbody>
+              {groupedEntries[month].map((entry, index) => (
+                <tr key={index}>
+                  <td className="border px-4 py-2">{entry["Trade Day"]}</td>
+                  <td className="border px-4 py-2">{entry["No. of Trades"]}</td>
+                  <td className="border px-4 py-2">{entry["Overall P&L"]}</td>
+                  <td className="border px-4 py-2">{entry["Net P&L"]}</td>
+                  <td className="border px-4 py-2">{entry["Status"]}</td>
+                  <td className="border px-4 py-2">{entry["Transaction"]}</td>
+                </tr>
               ))}
-            </Pie>
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
-
-      <ReadTradersDiary />
+            </tbody>
+          </table>
+        </div>
+      ))}
     </div>
   );
 };
