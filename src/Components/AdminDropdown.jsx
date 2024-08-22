@@ -51,12 +51,7 @@ function AdminNavbar() {
       >
        Enter Trade Predictions
       </Link>
-      <Link
-        to="/admin/tradersdiary"
-        className="text-gray-700 hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
-      >
-     Traders Diary
-      </Link>
+    
       <Link
         to="/admin/multi-select"
         className="text-gray-700 hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"

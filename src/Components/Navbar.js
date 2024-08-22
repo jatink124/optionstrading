@@ -51,6 +51,13 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="nav-item">
+            <Link
+        to="/admin/tradersdiary"
+        className="text-gray-700 hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
+      >
+     Traders Diary
+      </Link></li>
+            <li className="nav-item">
               <Link className="text-gray-700 hover:text-gray-900" to="/marketpredictioninsights">
                 Market Prediction Insights
               </Link>

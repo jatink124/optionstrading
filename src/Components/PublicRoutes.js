@@ -11,8 +11,8 @@ import ImportantPoints from './ImportantPoints';
 import DailyReport from './DailyReport';
 import Tutorials from './Tutotrials';
 import StrategyTable from './StrategyTable';
+import TradersDiary from './TradersDiary';
 import ReadStrategy from './ReadStrategy';
-
 const PublicRoutes = () => (
   <>
     <Navbar />
@@ -26,6 +26,7 @@ const PublicRoutes = () => (
       <Route path="/lessonslearnt" element={<DailyReport/>} />
       <Route path="/tutorials" element={<Tutorials/>} />
     <Route path="/readstrategy" element={<ReadStrategy/>} />
+    <Route path="/tradersdiary" element={<TradersDiary />} />
       {/* Add more routes as needed */}
     </Routes>
   </>
