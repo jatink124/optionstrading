@@ -36,6 +36,7 @@ const TradingJournalList = () => {
       setLoading(false);
     }
   };
+
   const handleEditClick = (entry) => {
     const formattedDate = entry.dateTime ? new Date(entry.dateTime).toISOString().slice(0, 16) : '';
     
@@ -53,7 +54,6 @@ const TradingJournalList = () => {
       comments: entry.comments || ''
     });
   };
-  
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
@@ -95,6 +95,9 @@ const TradingJournalList = () => {
       setError(error.message);
     }
   };
+
+  // Calculate the total profit/loss
+  const totalProfitLoss = tradingJournals.reduce((total, entry) => total + parseFloat(entry.profitLoss || 0), 0);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -161,8 +164,8 @@ const TradingJournalList = () => {
                     <td>{entry.strategy}</td>
                     <td>{entry.reasonForEntry}</td>
                     <td>{entry.contractSize}</td>
-                    <td className={entry.profitLossString === 'Profit' ? 'text-success' : 'text-danger'}>
-                      {entry.profitLoss} ({entry.profitLossString})
+                    <td className={entry.profitLoss >= 0 ? 'text-success' : 'text-danger'}>
+                      {entry.profitLoss}
                     </td>
                     <td>{entry.comments}</td>
                     <td>
@@ -180,6 +183,7 @@ const TradingJournalList = () => {
           )}
         </tbody>
       </table>
+      <h3>Total Profit/Loss: {totalProfitLoss}</h3>
     </div>
   );
 };

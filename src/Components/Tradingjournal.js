@@ -53,7 +53,7 @@ const Tradingjournal = () => {
       multiplier = 1;
     }
 
-    const profitLoss = ((exitPrice - entryPrice) * multiplier) - 49;
+    const profitLoss = ((exitPrice - entryPrice) * multiplier) - 50;
     const profitLossString = profitLoss < 0 ? 'Loss' : 'Profit';
 
     setFormData((prevData) => ({
