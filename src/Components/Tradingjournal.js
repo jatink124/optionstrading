@@ -78,7 +78,7 @@ const Tradingjournal = () => {
     };
 
     try {
-      const response = await fetch('https://crud1-xoqf.onrender.com/api/tradingjournals', {
+      const response = await fetch('http://localhost:5000/api/tradingjournals', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -228,14 +228,14 @@ const Tradingjournal = () => {
         <button type="submit" className="btn btn-primary">Submit</button>
       </form>
       <div className="container mt-5">
-        {!authenticated ? (
+        {/* {!authenticated ? (
           <Authentication onAuthentication={handleAuthentication} />
-        ) : (
+        ) : ( */}
           <>
             <h2>Options Trading Form</h2>
             <TradingJournalList/>
           </>
-        )}
+        {/* )} */}
       </div>
     </div>
   );
