@@ -15,7 +15,7 @@ const StrategyTable = () => {
     const fetchStrategies = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:5000/api/strategies');
+        const response = await axios.get('https://crud-2-6ptv.onrender.com/api/strategies');
         setStrategies(response.data);
       } catch (error) {
         setError('Error fetching strategies');
@@ -30,7 +30,7 @@ const StrategyTable = () => {
 
   const handleAddStrategy = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/strategies', newStrategy);
+      const response = await axios.post('https://crud-2-6ptv.onrender.com/api/strategies', newStrategy);
       setStrategies([...strategies, response.data]);
       setNewStrategy({ todaysStrategy: '', thingsToDo: '' });
     } catch (error) {
@@ -41,7 +41,7 @@ const StrategyTable = () => {
 
   const handleDeleteStrategy = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/strategies/${id}`);
+      await axios.delete(`https://crud-2-6ptv.onrender.com/api/strategies/${id}`);
       setStrategies(strategies.filter(strategy => strategy._id !== id));
     } catch (error) {
       setError('Error deleting strategy');
@@ -51,7 +51,7 @@ const StrategyTable = () => {
 
   const handleUpdateStrategy = async (id, updatedStrategy) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/strategies/${id}`, updatedStrategy);
+      const response = await axios.put(`https://crud-2-6ptv.onrender.com/api/strategies/${id}`, updatedStrategy);
       setStrategies(strategies.map(strategy => 
         strategy._id === id ? response.data : strategy
       ));
