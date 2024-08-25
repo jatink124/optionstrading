@@ -1,3 +1,4 @@
+import API_BASE_URL from './config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReadModal from './ReadModal';
@@ -9,7 +10,7 @@ const ReadStrategy = () => {
   useEffect(() => {
     const fetchStrategies = async () => {
       try {
-        const response = await axios.get('https://crud-2-6ptv.onrender.com/api/strategies');
+        const response = await axios.get('${API_BASE_URL}/strategies');
         setStrategies(response.data);
       } catch (error) {
         console.error('Error fetching strategies:', error);
