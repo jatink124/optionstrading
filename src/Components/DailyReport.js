@@ -9,7 +9,7 @@ const DailyReport = () => {
   // const apiUrl = process.env.REACT_APP_API_BASE_URL;
   const fetchReportData = () => {
     // axios.get('https://crud1-xoqf.onrender.com/repdata')
-    axios.get('http://localhost:5000/api/dailylearningentries')
+    axios.get('https://crud-2-6ptv.onrender.com/api/dailylearningentries')
       .then(response => {
     
         setReportData(response.data);

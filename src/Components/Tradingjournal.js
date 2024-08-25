@@ -72,7 +72,7 @@ const Tradingjournal = () => {
   
     try {
   
-      const response = await fetch('http://localhost:5000/api/tradingjournal', {
+      const response = await fetch('https://crud-2-6ptv.onrender.com/api/tradingjournal', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

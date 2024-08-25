@@ -4,7 +4,7 @@ import axios from 'axios';
 
 // Function to fetch data
 const fetchData = async () => {
-  const response = await axios.get('http://localhost:5000/api/vk');
+  const response = await axios.get('https://crud-2-6ptv.onrender.com/api/vk');
   return response.data;
 };
 

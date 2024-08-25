@@ -9,7 +9,7 @@ const ReadStrategy = () => {
   useEffect(() => {
     const fetchStrategies = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/strategies');
+        const response = await axios.get('https://crud-2-6ptv.onrender.com/api/strategies');
         setStrategies(response.data);
       } catch (error) {
         console.error('Error fetching strategies:', error);
