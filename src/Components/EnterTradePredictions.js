@@ -6,25 +6,25 @@ import './EnterTradePredictions.css'; // Import the custom CSS
 
 // Fetch predictions from the server
 const fetchPredictions = async () => {
-  const response = await axios.get('http://localhost:5000/api/predictions');
+  const response = await axios.get('https://crud-2-6ptv.onrender.com/api/predictions');
   return response.data;
 };
 
 // Update prediction on the server
 const updatePrediction = async (updatedPrediction) => {
  debugger;
-  const response = await axios.put(`http://localhost:5000/api/predictions/${updatedPrediction._id}`, updatedPrediction);
+  const response = await axios.put(`https://crud-2-6ptv.onrender.com/api/predictions/${updatedPrediction._id}`, updatedPrediction);
   return response.data;
 };
 
 // Delete prediction from the server
 const deletePrediction = async (index) => {
-  await axios.delete(`http://localhost:5000/api/predictions/${index}`);
+  await axios.delete(`https://crud-2-6ptv.onrender.com/api/predictions/${index}`);
 };
 
 // Create a new prediction on the server
 const createPrediction = async (newPrediction) => {
-  const response = await axios.post('http://localhost:5000/api/predictions', newPrediction);
+  const response = await axios.post('https://crud-2-6ptv.onrender.com/api/predictions', newPrediction);
   return response.data;
 };
 
