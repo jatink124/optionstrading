@@ -5,13 +5,14 @@ import ReadVKResistanceBaseLevels from './ReadVKResistanceBaseLevels';
 
 // Function to fetch data
 const fetchEntries = async () => {
-  const response = await axios.get('https://crud1-xoqf.onrender.com/data');
+  const response = await axios.get('http://localhost:5000/api/vk');
   return response.data;
 };
 
 // Function to add a new entry
 const addEntry = async (newData) => {
-  const response = await axios.post('https://crud1-xoqf.onrender.com/data', newData);
+  const response = await axios.post('http://localhost:5000/api/vk', newData);
+
   return response.data;
 };
 

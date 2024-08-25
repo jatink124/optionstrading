@@ -18,27 +18,26 @@ const DataEntryForm = ({ onEntryAdded }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    axios.post('https://crud1-xoqf.onrender.com/repdata', formData)
-      .then(response => {
-        console.log('Data added:', response.data);
-        setFormData({
-          date: '',
-          lessonsLearned: '',
-          recommendations: ''
-        });
-        setLoading(false);
-        onEntryAdded();  // Notify parent component to fetch updated data
-      })
-      .catch(error => {
-        console.error('There was an error!', error);
-        setError('Failed to add entry. Please try again.');
-        setLoading(false);
+    try {
+      const response = await axios.post('https://crud-2-6ptv.onrender.com/api/dailylearningentries', formData);
+      console.log('Data added:', response.data);
+      setFormData({
+        date: '',
+        lessonsLearned: '',
+        recommendations: ''
       });
+      onEntryAdded();  // Notify parent component to fetch updated data
+    } catch (error) {
+      console.error('There was an error!', error);
+      setError('Failed to add entry. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -81,7 +80,11 @@ const DataEntryForm = ({ onEntryAdded }) => {
             required
           ></textarea>
         </div>
-        <button type="submit" className="bg-blue-500 text-white px-2 py-2 rounded-md hover:bg-blue-600 transition duration-200" disabled={loading}>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
+          disabled={loading}
+        >
           {loading ? 'Processing...' : 'Add Entry'}
         </button>
       </form>

@@ -52,7 +52,7 @@ const Navbar = () => {
             </li>
             <li className="nav-item">
             <Link
-        to="/admin/tradersdiary"
+        to="/tradersdiary"
         className="text-gray-700 hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium"
       >
      Traders Diary

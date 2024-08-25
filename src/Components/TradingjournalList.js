@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const TradingJournalList = () => {
+  // State hooks for managing journal entries, loading status, errors, and editing
   const [tradingJournals, setTradingJournals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,16 +19,16 @@ const TradingJournalList = () => {
     comments: ''
   });
 
+  // Fetch trading journals when the component mounts
   useEffect(() => {
     fetchTradingJournals();
   }, []);
 
+  // Function to fetch trading journals from the API
   const fetchTradingJournals = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/tradingjournals');
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
-      }
+      const response = await fetch('http://localhost:5000/api/tradingjournal');
+      if (!response.ok) throw new Error('Failed to fetch data');
       const data = await response.json();
       setTradingJournals(data);
     } catch (error) {
@@ -37,10 +38,11 @@ const TradingJournalList = () => {
     }
   };
 
+  // Prepare the form for editing an entry
   const handleEditClick = (entry) => {
     const formattedDate = entry.dateTime ? new Date(entry.dateTime).toISOString().slice(0, 16) : '';
     
-    setIsEditing(entry.id);
+    setIsEditing(entry._id);
     setEditFormData({
       dateTime: formattedDate,
       assetType: entry.assetType || '',
@@ -55,57 +57,49 @@ const TradingJournalList = () => {
     });
   };
 
+  // Handle changes in the edit form
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    setEditFormData({ ...editFormData, [name]: value });
+    setEditFormData(prevData => ({ ...prevData, [name]: value }));
   };
 
+  // Submit the edited data to the API
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`https://crud1-xoqf.onrender.com/api/tradingjournals/${isEditing}`, {
+      const response = await fetch(`http://localhost:5000/api/tradingjournal/${isEditing}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editFormData),
       });
       if (response.ok) {
         fetchTradingJournals();
         setIsEditing(null);
-      } else {
-        throw new Error('Failed to update entry');
-      }
+      } else throw new Error('Failed to update entry');
     } catch (error) {
       setError(error.message);
     }
   };
 
+  // Handle deletion of an entry
   const handleDeleteClick = async (id) => {
     try {
-      const response = await fetch(`https://crud1-xoqf.onrender.com/api/tradingjournals/${id}`, {
+      const response = await fetch(`http://localhost:5000/api/tradingjournal/${id}`, {
         method: 'DELETE',
       });
-      if (response.ok) {
-        fetchTradingJournals();
-      } else {
-        throw new Error('Failed to delete entry');
-      }
+      if (response.ok) fetchTradingJournals();
+      else throw new Error('Failed to delete entry');
     } catch (error) {
       setError(error.message);
     }
   };
 
-  // Calculate the total profit/loss
+  // Calculate total profit/loss
   const totalProfitLoss = tradingJournals.reduce((total, entry) => total + parseFloat(entry.profitLoss || 0), 0);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
+  // Render loading, error, or the list of trading journals
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="container mt-5">
@@ -129,8 +123,8 @@ const TradingJournalList = () => {
         <tbody>
           {tradingJournals.length > 0 ? (
             tradingJournals.map((entry) => (
-              <tr key={entry.id}>
-                {isEditing === entry.id ? (
+              <tr key={entry._id}>
+                {isEditing === entry._id ? (
                   <>
                     <td>
                       <input
@@ -170,7 +164,7 @@ const TradingJournalList = () => {
                     <td>{entry.comments}</td>
                     <td>
                       <button className="btn btn-primary" onClick={() => handleEditClick(entry)}>Edit</button>
-                      <button className="btn btn-danger" onClick={() => handleDeleteClick(entry.id)}>Delete</button>
+                      <button className="btn btn-danger" onClick={() => handleDeleteClick(entry._id)}>Delete</button>
                     </td>
                   </>
                 )}

@@ -11,7 +11,7 @@ const DailyLearningEntries = () => {
 
   // Function to fetch report data
   const fetchReportData = () => {
-    axios.get('https://crud1-xoqf.onrender.com/repdata')
+    axios.get('https://crud-2-6ptv.onrender.com/api/dailylearningentries')
       .then(response => {
         setReportData(response.data);
       })

@@ -6,24 +6,25 @@ import './EnterTradePredictions.css'; // Import the custom CSS
 
 // Fetch predictions from the server
 const fetchPredictions = async () => {
-  const response = await axios.get('https://crud1-xoqf.onrender.com/api/predictions');
+  const response = await axios.get('http://localhost:5000/api/predictions');
   return response.data;
 };
 
 // Update prediction on the server
 const updatePrediction = async (updatedPrediction) => {
-  const response = await axios.put(`https://crud1-xoqf.onrender.com/api/predictions/${updatedPrediction.index}`, updatedPrediction);
+ debugger;
+  const response = await axios.put(`http://localhost:5000/api/predictions/${updatedPrediction._id}`, updatedPrediction);
   return response.data;
 };
 
 // Delete prediction from the server
 const deletePrediction = async (index) => {
-  await axios.delete(`https://crud1-xoqf.onrender.com/api/predictions/${index}`);
+  await axios.delete(`http://localhost:5000/api/predictions/${index}`);
 };
 
 // Create a new prediction on the server
 const createPrediction = async (newPrediction) => {
-  const response = await axios.post('https://crud1-xoqf.onrender.com/api/predictions', newPrediction);
+  const response = await axios.post('http://localhost:5000/api/predictions', newPrediction);
   return response.data;
 };
 
@@ -81,16 +82,25 @@ function EnterTradePredictions() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateMutation.mutate(formData);
+    if (formData._id) {
+      updateMutation.mutate(formData);
+    } else {
+      console.error('Index is required for updating prediction');
+    }
   };
 
   const handleNewPredictionSubmit = (e) => {
     e.preventDefault();
+    // Ensure index is not required for new predictions unless your API needs it
     createMutation.mutate(newPrediction);
   };
 
   const handleDelete = (index) => {
-    deleteMutation.mutate(index);
+    if (index) {
+      deleteMutation.mutate(index);
+    } else {
+      console.error('Index is required for deleting prediction');
+    }
   };
 
   return (
@@ -165,7 +175,7 @@ function EnterTradePredictions() {
             <tbody className="bg-white divide-y divide-gray-200">
               {predictions.map(prediction => (
                 <tr key={prediction.index}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{prediction.index}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{prediction._id}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{prediction.tradeAnalystName}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{prediction.niftyPrediction}</td>
                   <td className="px-6 py-4 multiline text-lg text-gray-500">{prediction.bankniftyPrediction}</td>
@@ -178,7 +188,7 @@ function EnterTradePredictions() {
                     </button>
                     <button
                       className="text-red-500 hover:text-red-700"
-                      onClick={() => handleDelete(prediction.index)}
+                      onClick={() => handleDelete(prediction._id)}
                     >
                       Delete
                     </button>
@@ -207,7 +217,7 @@ function EnterTradePredictions() {
                   <label htmlFor="tradeAnalystName">Trade Analyst Name</label>
                 </div>
                 <div className="mb-4 input-container">
-                  <input
+                <input
                     id="niftyPrediction"
                     name="niftyPrediction"
                     type="text"
@@ -231,7 +241,6 @@ function EnterTradePredictions() {
                   />
                   <label htmlFor="bankniftyPrediction">Banknifty Prediction</label>
                 </div>
-
                 <button
                   type="submit"
                   className="bg-blue-500 text-white px-4 py-2 rounded-md"
@@ -255,3 +264,4 @@ function EnterTradePredictions() {
 }
 
 export default EnterTradePredictions;
+

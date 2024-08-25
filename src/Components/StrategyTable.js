@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Modal from './Modal';  // Import your Modal component at the top level
+import Modal from './Modal'; // Import your Modal component
 
 const StrategyTable = () => {
   const [strategies, setStrategies] = useState([]);
@@ -8,14 +8,20 @@ const StrategyTable = () => {
   const [editingStrategy, setEditingStrategy] = useState(null);
   const [taskStatuses, setTaskStatuses] = useState({});
   const [selectedStrategy, setSelectedStrategy] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchStrategies = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get('https://crud1-xoqf.onrender.com/api/strategies');
+        const response = await axios.get('http://localhost:5000/api/strategies');
         setStrategies(response.data);
       } catch (error) {
+        setError('Error fetching strategies');
         console.error('Error fetching strategies:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -24,31 +30,34 @@ const StrategyTable = () => {
 
   const handleAddStrategy = async () => {
     try {
-      const response = await axios.post('https://crud1-xoqf.onrender.com/api/strategies', newStrategy);
+      const response = await axios.post('http://localhost:5000/api/strategies', newStrategy);
       setStrategies([...strategies, response.data]);
       setNewStrategy({ todaysStrategy: '', thingsToDo: '' });
     } catch (error) {
+      setError('Error adding strategy');
       console.error('Error adding strategy:', error);
     }
   };
 
   const handleDeleteStrategy = async (id) => {
     try {
-      await axios.delete(`https://crud1-xoqf.onrender.com/api/strategies/${id}`);
-      setStrategies(strategies.filter(strategy => strategy.id !== id));
+      await axios.delete(`http://localhost:5000/api/strategies/${id}`);
+      setStrategies(strategies.filter(strategy => strategy._id !== id));
     } catch (error) {
+      setError('Error deleting strategy');
       console.error('Error deleting strategy:', error);
     }
   };
 
   const handleUpdateStrategy = async (id, updatedStrategy) => {
     try {
-      const response = await axios.put(`https://crud1-xoqf.onrender.com/api/strategies/${id}`, updatedStrategy);
+      const response = await axios.put(`http://localhost:5000/api/strategies/${id}`, updatedStrategy);
       setStrategies(strategies.map(strategy => 
-        strategy.id === id ? response.data : strategy
+        strategy._id === id ? response.data : strategy
       ));
       setEditingStrategy(null);
     } catch (error) {
+      setError('Error updating strategy');
       console.error('Error updating strategy:', error);
     }
   };
@@ -78,6 +87,9 @@ const StrategyTable = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Strategies</h1>
+
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-500">{error}</p>}
 
       <div className="mb-4">
         <input
@@ -113,9 +125,9 @@ const StrategyTable = () => {
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {strategies.map((strategy) => (
-            <tr key={strategy.id}>
+            <tr key={strategy._id}>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {strategy.id}
+                {strategy._id}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {strategy.todaysStrategy}
@@ -130,7 +142,7 @@ const StrategyTable = () => {
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <button
-                  onClick={() => handleDeleteStrategy(strategy.id)}
+                  onClick={() => handleDeleteStrategy(strategy._id)}
                   className="bg-red-500 text-white p-1 mr-2"
                 >
                   Delete
@@ -152,12 +164,12 @@ const StrategyTable = () => {
           <h2 className="text-xl font-bold mb-4">Tasks for {selectedStrategy.todaysStrategy}</h2>
           <ul className="mb-4">
             {splitTasks(selectedStrategy.thingsToDo).map((task, index) => (
-              <li key={index} className="flex items-center mb-2">
+              <li key={`${selectedStrategy._id}-${index}`} className="flex items-center mb-2">
                 <span className="mr-2">{task}</span>
                 <input
                   type="checkbox"
-                  checked={taskStatuses[selectedStrategy.id]?.[index] || false}
-                  onChange={() => handleTaskStatusChange(selectedStrategy.id, index)}
+                  checked={taskStatuses[selectedStrategy._id]?.[index] || false}
+                  onChange={() => handleTaskStatusChange(selectedStrategy._id, index)}
                 />
               </li>
             ))}
@@ -186,7 +198,7 @@ const StrategyTable = () => {
             className="border p-2 mb-2 w-full"
           />
           <button
-            onClick={() => handleUpdateStrategy(editingStrategy.id, editingStrategy)}
+            onClick={() => handleUpdateStrategy(editingStrategy._id, editingStrategy)}
             className="bg-green-500 text-white p-2"
           >
             Save Changes
