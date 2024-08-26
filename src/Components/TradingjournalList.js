@@ -68,7 +68,7 @@ const TradingJournalList = () => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:5000/api/tradingjournal/${isEditing}`, {
+      const response = await fetch(`${API_BASE_URL}/tradingjournal/${isEditing}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editFormData),
@@ -85,7 +85,7 @@ const TradingJournalList = () => {
   // Handle deletion of an entry
   const handleDeleteClick = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/tradingjournal/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/tradingjournal/${id}`, {
         method: 'DELETE',
       });
       if (response.ok) fetchTradingJournals();
