@@ -2,20 +2,20 @@
   "August 2024": [
    
     {
-      "date": "Aug 23 2024, Fri",
-      "entries": 12,
-      "amount": -181.25,
-      "balance": -492.52,
-      "status": "In Loss",
-      "action": "View"
+      "Trade Day": "Aug 23 2024, Fri",
+      "No. of Trades": 12,
+      "Overall P&L": "-181.25",
+      "Net P&L": "-492.52",
+      "Status": "In Loss",
+      "Transaction": "View"
   },
   {
-      "date": "Aug 22 2024, Thu",
-      "entries": 21,
-      "amount": 477.00,
-      "balance": -63.38,
-      "status": "In Profit",
-      "action": "View"
+      "Trade Day": "Aug 22 2024, Thu",
+      "No. of Trades": 21,
+      "Overall P&L": "477.00",
+      "Net P&L": "-63.38",
+      "Status": "In Profit",
+      "Transaction": "View"
   },
     {
       "Trade Day": "Aug 21 2024, Wed",
