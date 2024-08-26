@@ -10,7 +10,7 @@ const ReadStrategy = () => {
   useEffect(() => {
     const fetchStrategies = async () => {
       try {
-        const response = await axios.get('${API_BASE_URL}/strategies');
+        const response = await axios.get(`${API_BASE_URL}/strategies`);
         setStrategies(response.data);
       } catch (error) {
         console.error('Error fetching strategies:', error);

@@ -1,9 +1,10 @@
+import API_BASE_URL from './config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 // API Function
 const fetchPredictions = async () => {
-  const response = await axios.get('https://crud-2-6ptv.onrender.com/api/predictions');
+  const response = await axios.get(`${API_BASE_URL}/predictions`);
   // const response = await axios.get('https://crud1-xoqf.onrender.com/api/predictions');
   return response.data;
 };

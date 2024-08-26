@@ -1,10 +1,11 @@
+import API_BASE_URL from './config';
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 // Function to fetch data
 const fetchData = async () => {
-  const response = await axios.get('https://crud-2-6ptv.onrender.com/api/vk');
+  const response = await axios.get(`${API_BASE_URL}/vk`);
   return response.data;
 };
 
