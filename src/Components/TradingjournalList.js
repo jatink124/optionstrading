@@ -85,7 +85,7 @@ const TradingJournalList = () => {
   // Handle deletion of an entry
   const handleDeleteClick = async (id) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/tradingjournal/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/tradingjournal/${id}`, {
         method: 'DELETE',
       });
       if (response.ok) fetchTradingJournals();
