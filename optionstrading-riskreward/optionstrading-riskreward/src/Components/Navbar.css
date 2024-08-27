@@ -1,0 +1,8 @@
+.nav-item a {
+    text-decoration: none; /* Remove underline */
+  }
+  
+  .nav-item a:hover {
+    text-decoration: underline; /* Add underline on hover */
+  }
+  

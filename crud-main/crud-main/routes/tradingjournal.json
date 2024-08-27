@@ -1,0 +1,16 @@
+[
+  {
+    "dateTime": "2024-08-17T21:08",
+    "assetType": "banknifty",
+    "optionType": "call",
+    "entryPrice": "69",
+    "exitPrice": "75",
+    "strategy": "dgfh",
+    "reasonForEntry": "wdd",
+    "contractSize": "3lot",
+    "profitLoss": "581.00",
+    "comments": "",
+    "profitLossString": "Profit",
+    "id": "b8bad925-abf9-418b-aced-31a92e911190"
+  }
+]
