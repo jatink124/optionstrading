@@ -2,7 +2,6 @@ import API_BASE_URL from './config';
 import React, { useState, useEffect } from 'react';
 
 const TradingJournalList = () => {
-  // State hooks for managing journal entries, loading status, errors, and editing
   const [tradingJournals, setTradingJournals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,18 +19,26 @@ const TradingJournalList = () => {
     comments: ''
   });
 
-  // Fetch trading journals when the component mounts
   useEffect(() => {
     fetchTradingJournals();
   }, []);
 
-  // Function to fetch trading journals from the API
   const fetchTradingJournals = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/tradingjournal`);
       if (!response.ok) throw new Error('Failed to fetch data');
       const data = await response.json();
-      setTradingJournals(data);
+      
+      // Get today's date in YYYY-MM-DD format
+      const today = new Date().toISOString().split('T')[0];
+
+      // Filter journals for today's date
+      const todayJournals = data.filter(entry => {
+        const entryDate = new Date(entry.dateTime).toISOString().split('T')[0];
+        return entryDate === today;
+      });
+
+      setTradingJournals(todayJournals);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -39,7 +46,6 @@ const TradingJournalList = () => {
     }
   };
 
-  // Prepare the form for editing an entry
   const handleEditClick = (entry) => {
     const formattedDate = entry.dateTime ? new Date(entry.dateTime).toISOString().slice(0, 16) : '';
     
@@ -58,13 +64,11 @@ const TradingJournalList = () => {
     });
   };
 
-  // Handle changes in the edit form
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditFormData(prevData => ({ ...prevData, [name]: value }));
   };
 
-  // Submit the edited data to the API
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -82,7 +86,6 @@ const TradingJournalList = () => {
     }
   };
 
-  // Handle deletion of an entry
   const handleDeleteClick = async (id) => {
     try {
       const response = await fetch(`${API_BASE_URL}/tradingjournal/${id}`, {
@@ -95,16 +98,14 @@ const TradingJournalList = () => {
     }
   };
 
-  // Calculate total profit/loss
   const totalProfitLoss = tradingJournals.reduce((total, entry) => total + parseFloat(entry.profitLoss || 0), 0);
 
-  // Render loading, error, or the list of trading journals
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="container mt-5">
-      <h2>Trading Journal Entries</h2>
+      <h2>Trading Journal Entries for Today</h2>
       <table className="table table-bordered">
         <thead>
           <tr>
@@ -173,7 +174,7 @@ const TradingJournalList = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="11">No entries found</td>
+              <td colSpan="11">No entries found for today</td>
             </tr>
           )}
         </tbody>
