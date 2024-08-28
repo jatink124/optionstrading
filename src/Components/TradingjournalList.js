@@ -28,7 +28,7 @@ const TradingJournalList = () => {
       const response = await fetch(`${API_BASE_URL}/tradingjournal`);
       if (!response.ok) throw new Error('Failed to fetch data');
       const data = await response.json();
-      
+
       // Get today's date in YYYY-MM-DD format
       const today = new Date().toISOString().split('T')[0];
 
@@ -48,7 +48,7 @@ const TradingJournalList = () => {
 
   const handleEditClick = (entry) => {
     const formattedDate = entry.dateTime ? new Date(entry.dateTime).toISOString().slice(0, 16) : '';
-    
+
     setIsEditing(entry._id);
     setEditFormData({
       dateTime: formattedDate,
@@ -98,7 +98,7 @@ const TradingJournalList = () => {
     }
   };
 
-  const totalProfitLoss = tradingJournals.reduce((total, entry) => total + parseFloat(entry.profitLoss || 0), 0);
+  const totalProfitLoss = tradingJournals.reduce((total, entry) => total + parseFloat(entry.profitLoss || 0), 0).toFixed(2);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -161,7 +161,7 @@ const TradingJournalList = () => {
                     <td>{entry.reasonForEntry}</td>
                     <td>{entry.contractSize}</td>
                     <td className={entry.profitLoss >= 0 ? 'text-success' : 'text-danger'}>
-                      {entry.profitLoss}
+                      {parseFloat(entry.profitLoss).toFixed(2)}
                     </td>
                     <td>{entry.comments}</td>
                     <td>
