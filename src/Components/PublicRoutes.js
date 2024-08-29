@@ -21,7 +21,7 @@ const PublicRoutes = () => (
       <Route path="/" element={<Mhome />} />
       <Route path="/risk-reward" element={<RiskReward />} />
       <Route path="/tradingchecklist" element={<TradingChecklist />} />
-      <Route path="/vklevels" element={<ReadVKResist anceBaseLevels />} />
+      <Route path="/vklevels" element={<ReadVKResistanceBaseLevels />} />
       <Route path="/marketpredictioninsights" element={<ImportantPoints />} />
       <Route path="/lessonslearnt" element={<DailyReport/>} />
       <Route path="/tutorials" element={<Tutorials/>} />
