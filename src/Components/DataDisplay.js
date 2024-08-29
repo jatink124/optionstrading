@@ -1,158 +1,186 @@
-import React, { useState, useEffect } from 'react';
+import API_BASE_URL from './config';
+import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
-const DataDisplay = () => {
-  const [entries, setEntries] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+// Function to fetch data
+const fetchData = async () => {
+  const response = await axios.get(`${API_BASE_URL}/vk`);
+  return response.data;
+};
+
+// Function to delete data
+const deleteData = async (id) => {
+  await axios.delete(`${API_BASE_URL}/vk/${id}`);
+};
+
+// Function to update data
+const updateData = async (updatedEntry) => {
+  await axios.put(`${API_BASE_URL}/vk/${updatedEntry.id}`, updatedEntry);
+};
+
+const ReadVKResistanceBaseLevels = () => {
+  const queryClient = useQueryClient();
+  const { data, isLoading, isError, error } = useQuery(['data'], fetchData);
+  const deleteMutation = useMutation(deleteData, {
+    onSuccess: () => {
+      // Invalidate and refetch data after delete
+      queryClient.invalidateQueries(['data']);
+    },
+  });
+
+  const updateMutation = useMutation(updateData, {
+    onSuccess: () => {
+      // Invalidate and refetch data after update
+      queryClient.invalidateQueries(['data']);
+    },
+  });
+
   const [isEditing, setIsEditing] = useState(false);
   const [currentEntry, setCurrentEntry] = useState(null);
   const [formData, setFormData] = useState({
-    date: '',
-    lessonsLearned: '',
-    recommendations: ''
+    index: '',
+    r1: '',
+    r2: '',
+    base1: '',
+    base2: '',
   });
 
-  useEffect(() => {
-    fetchEntries();
-  }, []);
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error fetching data: {error.message}</p>;
 
-  const fetchEntries = async () => {
-    try {
-      const response = await axios.get('https://crud-2-6ptv.onrender.com/api/dailylearningentries');
-      setEntries(response.data);
-    } catch (error) {
-      console.error('There was an error fetching the data!', error);
-      setError('Failed to fetch entries. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+  const handleDelete = (id) => {
+    deleteMutation.mutate(id);
   };
 
-  const handleEditClick = (entry) => {
+  const handleEdit = (entry) => {
     setIsEditing(true);
     setCurrentEntry(entry);
     setFormData({
-      date: entry.date.split('T')[0],  // Format date for input
-      lessonsLearned: entry.lessonsLearned,
-      recommendations: entry.recommendations
+      index: entry.index,
+      r1: entry.r1,
+      r2: entry.r2,
+      base1: entry.base1,
+      base2: entry.base2,
     });
-  };
-
-  const handleDeleteClick = async (id) => {
-    try {
-      await axios.delete(`http://localhost:5000/api/dailylearningentries/${id}`);
-      fetchEntries();  // Refresh the list after deletion
-    } catch (error) {
-      console.error('There was an error deleting the entry!', error);
-      setError('Failed to delete entry. Please try again.');
-    }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      await axios.put(`http://localhost:5000/api/dailylearningentries/${currentEntry._id}`, formData);
-      setIsEditing(false);
-      setCurrentEntry(null);
-      fetchEntries();  // Refresh the list after updating
-    } catch (error) {
-      console.error('There was an error updating the entry!', error);
-      setError('Failed to update entry. Please try again.');
-    }
+    updateMutation.mutate({ ...formData, id: currentEntry.id });
+    setIsEditing(false);
+    setCurrentEntry(null);
   };
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p className="text-red-500">{error}</p>;
-  }
-
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-xl font-bold mb-4">Entries</h2>
-      {isEditing && (
+    <div className="container mx-auto mt-4">
+      <h2 className="text-2xl font-bold mb-4">Data List</h2>
+      {isEditing ? (
         <form onSubmit={handleSubmit} className="mb-4">
           <div className="flex flex-col mb-2">
-            <label htmlFor="date" className="mb-1">Date:</label>
+            <label htmlFor="index" className="mb-1">Index:</label>
             <input
-              id="date"
-              type="date"
-              name="date"
-              value={formData.date}
+              id="index"
+              type="text"
+              name="index"
+              value={formData.index}
               onChange={handleChange}
               className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500"
               required
             />
           </div>
           <div className="flex flex-col mb-2">
-            <label htmlFor="lessonsLearned" className="mb-1">Lessons Learned:</label>
-            <textarea
-              id="lessonsLearned"
-              name="lessonsLearned"
-              value={formData.lessonsLearned}
+            <label htmlFor="r1" className="mb-1">R1:</label>
+            <input
+              id="r1"
+              type="text"
+              name="r1"
+              value={formData.r1}
               onChange={handleChange}
               className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500"
-              rows="3"
               required
-            ></textarea>
+            />
           </div>
           <div className="flex flex-col mb-2">
-            <label htmlFor="recommendations" className="mb-1">Recommendations:</label>
-            <textarea
-              id="recommendations"
-              name="recommendations"
-              value={formData.recommendations}
+            <label htmlFor="r2" className="mb-1">R2:</label>
+            <input
+              id="r2"
+              type="text"
+              name="r2"
+              value={formData.r2}
               onChange={handleChange}
               className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500"
-              rows="3"
               required
-            ></textarea>
+            />
+          </div>
+          <div className="flex flex-col mb-2">
+            <label htmlFor="base1" className="mb-1">Base1:</label>
+            <input
+              id="base1"
+              type="text"
+              name="base1"
+              value={formData.base1}
+              onChange={handleChange}
+              className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500"
+              required
+            />
+          </div>
+          <div className="flex flex-col mb-2">
+            <label htmlFor="base2" className="mb-1">Base2:</label>
+            <input
+              id="base2"
+              type="text"
+              name="base2"
+              value={formData.base2}
+              onChange={handleChange}
+              className="border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:border-blue-500"
+              required
+            />
           </div>
           <button
             type="submit"
-            className="bg-blue-500 text-white px-2 py-2 rounded-md hover:bg-blue-600 transition duration-200"
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
           >
             Update Entry
           </button>
         </form>
-      )}
-
-      {entries.length > 0 ? (
-        <table className="min-w-full bg-white">
+      ) : (
+        <table className="table-auto border border-collapse w-5/6 md:w-full">
           <thead>
-            <tr>
-              <th className="py-2">Date</th>
-              <th className="py-2">Lessons Learned</th>
-              <th className="py-2">Recommendations</th>
-              <th className="py-2">Actions</th>
+            <tr className="bg-gray-200 text-left">
+              <th className="px-2 py-2">Index</th>
+              <th className="px-2 py-2">R1</th>
+              <th className="px-2 py-2">R2</th>
+              <th className="px-2 py-2">Base1</th>
+              <th className="px-2 py-2">Base2</th>
+              <th className="px-2 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {entries.map((entry) => (
-              <tr key={entry._id} className="border-t">
-                <td className="py-2">{new Date(entry.date).toLocaleDateString()}</td>
-                <td className="py-2">{entry.lessonsLearned}</td>
-                <td className="py-2">{entry.recommendations}</td>
-                <td className="py-2 flex space-x-2">
+            {data.map((item) => (
+              <tr key={item.id} className="border-b">
+                <td className="px-2 py-2">{item.index}</td>
+                <td className="px-2 py-2">{item.r1}</td>
+                <td className="px-2 py-2">{item.r2}</td>
+                <td className="px-2 py-2">{item.base1}</td>
+                <td className="px-2 py-2">{item.base2}</td>
+                <td className="px-2 py-2 flex space-x-2">
                   <button
-                    onClick={() => handleEditClick(entry)}
+                    onClick={() => handleEdit(item)}
                     className="bg-yellow-500 text-white px-2 py-1 rounded-md hover:bg-yellow-600 transition duration-200"
                   >
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDeleteClick(entry._id)}
+                    onClick={() => handleDelete(item.id)}
                     className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition duration-200"
                   >
                     Delete
@@ -162,11 +190,9 @@ const DataDisplay = () => {
             ))}
           </tbody>
         </table>
-      ) : (
-        <p>No entries found.</p>
       )}
     </div>
   );
 };
 
-export default DataDisplay;
+export default ReadVKResistanceBaseLevels;

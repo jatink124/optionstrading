@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import ReadVKResistanceBaseLevels from './ReadVKResistanceBaseLevels';
@@ -12,7 +12,6 @@ const fetchEntries = async () => {
 // Function to add a new entry
 const addEntry = async (newData) => {
   const response = await axios.post('https://crud-2-6ptv.onrender.com/api/vk', newData);
-
   return response.data;
 };
 
@@ -22,20 +21,30 @@ const CreateComponent = () => {
     r1: '',
     r2: '',
     base1: '',
-    base2: ''
+    base2: '',
+    sequence: ''  // Add sequence to formData
   });
   const [error, setError] = useState('');
+  const [nextSequence, setNextSequence] = useState(1); // State to hold the next sequence number
   const queryClient = useQueryClient();
 
   // Fetch existing entries
   const { data: entries, isLoading, isError } = useQuery({
     queryKey: ['data'],
-    queryFn: fetchEntries
+    queryFn: fetchEntries,
+    onSuccess: (data) => {
+      // Calculate the next sequence number based on existing entries
+      const maxSequence = data.reduce((max, entry) => Math.max(max, entry.sequence || 0), 0);
+      setNextSequence(maxSequence + 1);
+    }
   });
 
   // Mutation for adding a new entry
   const mutation = useMutation({
-    mutationFn: addEntry,
+    mutationFn: (newData) => {
+      // Include the next sequence number in the newData
+      return addEntry({ ...newData, sequence: nextSequence });
+    },
     onSuccess: () => {
       // Invalidate and refetch data
       queryClient.invalidateQueries({ queryKey: ['data'] });
@@ -44,8 +53,10 @@ const CreateComponent = () => {
         r1: '',
         r2: '',
         base1: '',
-        base2: ''
+        base2: '',
+        sequence: '' // Reset sequence in formData
       });
+      setNextSequence(prev => prev + 1); // Increment sequence number for next entry
     },
     onError: () => {
       setError('Failed to add entry. Please try again.');
@@ -98,7 +109,6 @@ const CreateComponent = () => {
         </form>
         {error && <p className="text-red-500 mt-2">{error}</p>}
       </div>
-
 
       <ReadVKResistanceBaseLevels />
     </div>
