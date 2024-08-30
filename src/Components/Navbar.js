@@ -7,7 +7,11 @@ const Navbar = () => {
     <nav className="bg-gray-100 border-b border-gray-200">
       <div className="container mx-auto flex items-center justify-between p-4">
         <Link to="/" className="flex items-center">
-          <img src="/otlogo.png" alt="Navbar Logo" className="h-20 w-auto" />
+          <img
+            src="/otlogo.png"
+            alt="Navbar Logo"
+            className="h-20 w-auto sm:h-20 md:h-24 lg:h-28 xl:h-32" // Responsive height classes
+          />
         </Link>
         <button
           className="block lg:hidden p-2 text-gray-700 focus:outline-none"
