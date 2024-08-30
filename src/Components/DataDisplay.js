@@ -21,15 +21,22 @@ const updateData = async (updatedEntry) => {
 
 const ReadVKResistanceBaseLevels = () => {
   const queryClient = useQueryClient();
-  const { data, isLoading, isError, error } = useQuery(['data'], fetchData);
-  const deleteMutation = useMutation(deleteData, {
+
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['data'],
+    queryFn: fetchData,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteData,
     onSuccess: () => {
       // Invalidate and refetch data after delete
       queryClient.invalidateQueries(['data']);
     },
   });
 
-  const updateMutation = useMutation(updateData, {
+  const updateMutation = useMutation({
+    mutationFn: updateData,
     onSuccess: () => {
       // Invalidate and refetch data after update
       queryClient.invalidateQueries(['data']);

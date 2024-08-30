@@ -1,19 +1,17 @@
+// DailyReport.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import DailyReportenteriesTable from './DailyReportenteriesTable';
-import DataEntryForm from './DataEntryForm';
-import DataDisplay from './DataDisplay';
-import DailyReport from './DailyReport';
+import EntriesTable from './DailyReportenteriesTable';
 
-
-const DailyLearningEntries = () => {
+const crudDailyReportlearning = () => {
   const [reportData, setReportData] = useState([]);
-
-  // Function to fetch report data
+  // const apiUrl = process.env.REACT_APP_API_BASE_URL;
   const fetchReportData = () => {
+    // axios.get('https://crud1-xoqf.onrender.com/repdata')
     axios.get('https://crud-2-6ptv.onrender.com/api/dailylearningentries')
       .then(response => {
+    
         setReportData(response.data);
       })
       .catch(error => {
@@ -21,17 +19,16 @@ const DailyLearningEntries = () => {
       });
   };
 
-  // Fetch data on component mount
   useEffect(() => {
     fetchReportData();
   }, []);
 
   return (
     <div>
-      <DataEntryForm onEntryAdded={fetchReportData} />
- <DailyReport/>
+  
+      <EntriesTable reportData={reportData} />
     </div>
   );
 };
 
-export default DailyLearningEntries;
+export default crudDailyReportlearning;

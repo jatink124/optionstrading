@@ -179,6 +179,7 @@ function EnterTradePredictions() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{prediction.tradeAnalystName}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{prediction.niftyPrediction}</td>
                   <td className="px-6 py-4 multiline text-lg text-gray-500">{prediction.bankniftyPrediction}</td>
+                  <td className="px-6 py-4 multiline text-lg text-gray-500">{prediction.updatedAt}</td>
                   <td className="px-6 py-4 multiline text-lg text-gray-500">
                     <button 
                       className="text-blue-500 hover:text-blue-700 mr-2"
