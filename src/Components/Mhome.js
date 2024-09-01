@@ -1,6 +1,7 @@
 import React from 'react';
 import ChecklistCard from './ChecklistCard';
 import ParentComponent from './ParentComponent';
+import ThingsToAchieveCard from './ThingsToAchieveCard';
 
 function Mhome() {
   return (
@@ -10,6 +11,9 @@ function Mhome() {
       </div>
       <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
         <ParentComponent />
+      </div>
+      <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+        <ThingsToAchieveCard />
       </div>
     </div>
   );
