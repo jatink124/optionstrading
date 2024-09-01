@@ -1,0 +1,20 @@
+
+[
+    {
+      "id": 1,
+      "activity": "Exercise for 30 minutes"
+    },
+    {
+      "id": 2,
+      "activity": "Read a chapter of a book"
+    },
+    {
+      "id": 3,
+      "activity": "Complete a coding challenge"
+    },
+    {
+      "id": 4,
+      "activity": "Plan tomorrow's goals"
+    }
+  ]
+  
