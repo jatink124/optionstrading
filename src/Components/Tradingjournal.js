@@ -1,8 +1,10 @@
 import API_BASE_URL from './config';
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import TradingJournalList from './TradingjournalList';
+
 import Authentication from './Authentication';
+import TradingChecklist from './TradingChecklist';
+import TradingJournalList from './TradingjournalList';
 
 const Tradingjournal = () => {
   const [authenticated, setAuthenticated] = useState(false);
@@ -19,6 +21,7 @@ const Tradingjournal = () => {
     profitLossString: '',
     comments: '',
   });
+  const [totalProfitLoss, setTotalProfitLoss] = useState(0);
 
   const inputClass = "col-md-4 mb-3";
 
@@ -31,19 +34,16 @@ const Tradingjournal = () => {
   };
 
   useEffect(() => {
-    // Optional: Log the updated state for debugging purposes
     console.log('Form Data:', formData);
   }, [formData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Convert prices and contract size to numbers
     const entryPrice = parseFloat(formData.entryPrice);
     const exitPrice = parseFloat(formData.exitPrice);
-    const contractSize = parseInt(formData.contractSize, 10); // Use base 10
+    const contractSize = parseInt(formData.contractSize, 10);
   
-    // Calculate profit/loss
     let multiplier;
     if (formData.assetType === 'banknifty') {
       multiplier = 105;
@@ -56,23 +56,21 @@ const Tradingjournal = () => {
     const profitLoss = ((exitPrice - entryPrice) * multiplier) - 50;
     const profitLossString = profitLoss < 0 ? 'Loss' : 'Profit';
   
-    // Prepare the request data
     const requestData = {
-      dateTime: new Date(formData.dateTime), // Convert to Date object
-      assetType: formData.assetType, // String
-      optionType: formData.optionType, // String
-      entryPrice: entryPrice, // Number
-      exitPrice: exitPrice, // Number
-      strategy: formData.strategy, // String
-      reasonForEntry: formData.reasonForEntry, // String
-      contractSize: contractSize, // Number
-      profitLoss: profitLoss, // Number
-      profitLossString: profitLossString, // String
-      comments: formData.comments || "", // String (optional)
+      dateTime: new Date(formData.dateTime),
+      assetType: formData.assetType,
+      optionType: formData.optionType,
+      entryPrice: entryPrice,
+      exitPrice: exitPrice,
+      strategy: formData.strategy,
+      reasonForEntry: formData.reasonForEntry,
+      contractSize: contractSize,
+      profitLoss: profitLoss,
+      profitLossString: profitLossString,
+      comments: formData.comments || "",
     };
   
     try {
-  
       const response = await fetch(`${API_BASE_URL}/tradingjournal`, {
         method: 'POST',
         headers: {
@@ -84,7 +82,6 @@ const Tradingjournal = () => {
       if (response.ok) {
         const result = await response.json();
         console.log(result);
-        // Reset form data
         setFormData({
           dateTime: '',
           assetType: '',
@@ -105,7 +102,6 @@ const Tradingjournal = () => {
       console.error('Error occurred while sending data to the backend', error);
     }
   };
-  
 
   return (
     <div className="container mt-5">
@@ -241,9 +237,7 @@ const Tradingjournal = () => {
         <button type="submit" className="btn btn-primary">Submit</button>
       </form>
 
-     
-        <TradingJournalList />
-      
+      <TradingJournalList setTotalProfitLoss={setTotalProfitLoss} />
     </div>
   );
 };
