@@ -3,11 +3,11 @@ import MakeTodayCountCard from './MakeTodayCountCard';
 
 const ZeroProfitLossComponent = () => (
   <div className="text-lg mt-2 text-gray-500">
-<MakeTodayCountCard/>
+    <MakeTodayCountCard />
   </div>
 );
 
-const TotalProfitLossDisplay = ({ totalProfitLoss }) => {
+const TotalProfitLossDisplay = ({ totalProfitLoss, recordCount }) => {
   if (totalProfitLoss == null) {
     return null; // Handle null or undefined totalProfitLoss if needed
   }
@@ -23,18 +23,28 @@ const TotalProfitLossDisplay = ({ totalProfitLoss }) => {
 
   return (
     <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white p-4 m-4">
-   
-      
-      {adjustedTotalProfitLoss == 0 ? (
+      <div className="font-bold text-xl mb-2">Total Profit/Loss</div>
+
+      {adjustedTotalProfitLoss === 0 ? (
         <ZeroProfitLossComponent />
       ) : (
-      <><div className="font-bold text-xl mb-2">Total Profit/Loss</div>
-      <p className={`text-2xl ${adjustedTotalProfitLoss > 0 ? 'text-green-500' : 'text-red-500'}`}>
-          {adjustedTotalProfitLoss.toFixed(2)} {/* Display with two decimal places */}
-        </p></>
+        <>
+          <p className={`text-2xl ${adjustedTotalProfitLoss > 0 ? 'text-green-500' : 'text-red-500'}`}>
+            {adjustedTotalProfitLoss.toFixed(2)} {/* Display with two decimal places */}
+          </p>
+        </>
       )}
-      
+
       {message && <p className="text-lg mt-2 font-semibold text-blue-500">{message}</p>}
+
+      <div className="mt-2 text-gray-700">
+        <p>Number of trades today: {recordCount}</p>
+        {recordCount >= 6 && (
+          <p className="text-lg mt-2 font-semibold text-red-500">
+            Your Trade Limit is reached, Press Kill switch button
+          </p>
+        )}
+      </div>
     </div>
   );
 };

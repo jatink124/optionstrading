@@ -1,23 +1,10 @@
-import API_BASE_URL from './config';
 import React, { useState, useEffect } from 'react';
+import API_BASE_URL from './config';
 
-const TradingjournalListprice = ({ setTotalProfitLoss }) => {
+const TradingjournalListprice = ({ setTotalProfitLoss, setRecordCount }) => {
   const [tradingJournals, setTradingJournals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isEditing, setIsEditing] = useState(null);
-  const [editFormData, setEditFormData] = useState({
-    dateTime: '',
-    assetType: '',
-    optionType: '',
-    entryPrice: '',
-    exitPrice: '',
-    strategy: '',
-    reasonForEntry: '',
-    contractSize: '',
-    profitLoss: '',
-    comments: ''
-  });
 
   useEffect(() => {
     fetchTradingJournals();
@@ -39,8 +26,13 @@ const TradingjournalListprice = ({ setTotalProfitLoss }) => {
       });
 
       setTradingJournals(todayJournals);
+
+      // Calculate total profit/loss
       const total = todayJournals.reduce((sum, entry) => sum + parseFloat(entry.profitLoss || 0), 0).toFixed(2);
       setTotalProfitLoss(total);
+
+      // Set the record count for today
+      setRecordCount(todayJournals.length);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -48,65 +40,24 @@ const TradingjournalListprice = ({ setTotalProfitLoss }) => {
     }
   };
 
-  const handleEditClick = (entry) => {
-    const formattedDate = entry.dateTime ? new Date(entry.dateTime).toISOString().slice(0, 16) : '';
-
-    setIsEditing(entry._id);
-    setEditFormData({
-      dateTime: formattedDate,
-      assetType: entry.assetType || '',
-      optionType: entry.optionType || '',
-      entryPrice: entry.entryPrice || '',
-      exitPrice: entry.exitPrice || '',
-      strategy: entry.strategy || '',
-      reasonForEntry: entry.reasonForEntry || '',
-      contractSize: entry.contractSize || '',
-      profitLoss: entry.profitLoss || '',
-      comments: entry.comments || ''
-    });
-  };
-
-  const handleEditChange = (e) => {
-    const { name, value } = e.target;
-    setEditFormData(prevData => ({ ...prevData, [name]: value }));
-  };
-
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch(`${API_BASE_URL}/tradingjournal/${isEditing}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editFormData),
-      });
-      if (response.ok) {
-        fetchTradingJournals();
-        setIsEditing(null);
-      } else throw new Error('Failed to update entry');
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  const handleDeleteClick = async (id) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/tradingjournal/${id}`, {
-        method: 'DELETE',
-      });
-      if (response.ok) fetchTradingJournals();
-      else throw new Error('Failed to delete entry');
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  const totalProfitLoss = tradingJournals.reduce((total, entry) => total + parseFloat(entry.profitLoss || 0), 0).toFixed(2);
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (
-   <></>
+    <div>
+      {/* Optionally, render the list of today's trading journals here */}
+      {tradingJournals.length > 0 ? (
+        <ul>
+          {tradingJournals.map(entry => (
+            <li key={entry._id}>
+              {entry.assetType} - {entry.profitLoss} Profit/Loss
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No records for today</p>
+      )}
+    </div>
   );
 };
 
