@@ -33,36 +33,49 @@ const ReadStrategy = () => {
       const updatedTasks = selectedStrategy.thingsToDo
         .split(/[0-9]+\.\s/)
         .filter(task => task)
-        .map((task, i) => (i === index ? { task, completed: !selectedStrategy.completedTasks[i] } : { task, completed: selectedStrategy.completedTasks[i] }));
+        .map((task, i) => (
+          i === index 
+            ? { task, completed: !selectedStrategy.completedTasks[i] }
+            : { task, completed: selectedStrategy.completedTasks[i] }
+        ));
 
-      setSelectedStrategy({ ...selectedStrategy, completedTasks: updatedTasks.map(task => task.completed) });
+      setSelectedStrategy({ 
+        ...selectedStrategy, 
+        completedTasks: updatedTasks.map(task => task.completed) 
+      });
     }
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Strategies</h1>
+    <div className="p-8">
+      <h1 className="text-4xl font-bold mb-8 text-gray-800">Strategies</h1>
 
       <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+        <thead className="bg-gray-100">
           <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Today's Strategy</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">List of Things to Do</th>
+            <th className="px-6 py-4 text-left text-lg font-semibold text-gray-700 uppercase tracking-wide">
+              Today's Strategy
+            </th>
+            <th className="px-6 py-4 text-left text-lg font-semibold text-gray-700 uppercase tracking-wide">
+              List of Things to Do
+            </th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {strategies.map((strategy) => (
             <tr key={strategy.id}>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{strategy.todaysStrategy}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <ul>
+              <td className="px-6 py-6 whitespace-nowrap text-lg text-gray-600">
+                {strategy.todaysStrategy}
+              </td>
+              <td className="px-6 py-6 whitespace-nowrap text-lg text-gray-600">
+                <ul className="list-disc pl-5">
                   {strategy.thingsToDo.split(/[0-9]+\.\s/).filter(task => task).map((task, index) => (
-                    <li key={index}>{task}</li>
+                    <li key={index} className="mb-2">{task}</li> 
                   ))}
                 </ul>
                 <button
                   onClick={() => handleOpenModal(strategy)}
-                  className="bg-blue-500 text-white p-1 mt-2"
+                  className="bg-blue-600 text-white font-semibold py-2 px-4 mt-4 rounded hover:bg-blue-700 transition duration-300"
                 >
                   View
                 </button>

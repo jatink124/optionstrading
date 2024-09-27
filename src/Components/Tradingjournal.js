@@ -43,12 +43,12 @@ const Tradingjournal = () => {
     const entryPrice = parseFloat(formData.entryPrice);
     const exitPrice = parseFloat(formData.exitPrice);
     const contractSize = parseInt(formData.contractSize, 10);
-  
+  debugger;
     let multiplier;
     if (formData.assetType === 'banknifty') {
-      multiplier = 105;
+      multiplier = contractSize*15;
     } else if (formData.assetType === 'nifty') {
-      multiplier = 100;
+      multiplier = contractSize*25;
     } else {
       multiplier = 1;
     }
@@ -220,6 +220,15 @@ const Tradingjournal = () => {
               <option value="3">3 Lots</option>
               <option value="4">4 Lots</option>
               <option value="5">5 Lots</option>
+              <option value="6">6 Lots</option>
+              <option value="7">7 Lot</option>
+              <option value="8">8 Lots</option>
+              <option value="9">9 Lots</option>
+              <option value="10">10 Lots</option>
+              <option value="11">11 Lots</option>
+              <option value="12">12 Lots</option>
+              <option value="13">13 Lots</option>
+              <option value="14">14 Lots</option>
             </select>
           </div>
 

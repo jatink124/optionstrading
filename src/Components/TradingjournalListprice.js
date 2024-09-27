@@ -46,7 +46,7 @@ const TradingjournalListprice = ({ setTotalProfitLoss, setRecordCount }) => {
   return (
     <div>
       {/* Optionally, render the list of today's trading journals here */}
-      {tradingJournals.length > 0 ? (
+      {/* {tradingJournals.length > 0 ? (
         <ul>
           {tradingJournals.map(entry => (
             <li key={entry._id}>
@@ -56,7 +56,7 @@ const TradingjournalListprice = ({ setTotalProfitLoss, setRecordCount }) => {
         </ul>
       ) : (
         <p>No records for today</p>
-      )}
+      )} */}
     </div>
   );
 };
