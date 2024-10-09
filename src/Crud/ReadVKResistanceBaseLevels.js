@@ -176,45 +176,31 @@ const ReadVKResistanceBaseLevels = () => {
           </button>
         </form>
       ) : (
-        <table className="table-auto border border-collapse w-5/6 md:w-full">
-          <thead>
-            <tr className="bg-gray-200 text-left">
-            <th className="px-2 py-2">id</th>
-              <th className="px-2 py-2">Index</th>
-              <th className="px-2 py-2">R1</th>
-              <th className="px-2 py-2">R2</th>
-              <th className="px-2 py-2">Base1</th>
-              <th className="px-2 py-2">Base2</th>
-              <th className="px-2 py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {recordsToDisplay.map((item) => (
-              <tr key={item._id} className="border-b">
-                <td className="px-2 py-2">{item._id}</td>
-                <td className="px-2 py-2">{item.index}</td>
-                <td className="px-2 py-2">{item.r1}</td>
-                <td className="px-2 py-2">{item.r2}</td>
-                <td className="px-2 py-2">{item.base1}</td>
-                <td className="px-2 py-2">{item.base2}</td>
-                <td className="px-2 py-2 flex space-x-2">
-                  <button
-                    onClick={() => handleEdit(item)}
-                    className="bg-yellow-500 text-white px-2 py-1 rounded-md hover:bg-yellow-600 transition duration-200"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(item._id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition duration-200"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {recordsToDisplay.map((item) => (
+            <div key={item._id} className="bg-white shadow-md p-4 rounded-lg border border-gray-300">
+              <h3 className="font-bold mb-2">Index: {item.index}</h3>
+              <p>R1: {item.r1}</p>
+              <p>R2: {item.r2}</p>
+              <p>Base1: {item.base1}</p>
+              <p>Base2: {item.base2}</p>
+              <div className="mt-4 flex space-x-2">
+                <button
+                  onClick={() => handleEdit(item)}
+                  className="bg-yellow-500 text-white px-2 py-1 rounded-md hover:bg-yellow-600 transition duration-200"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(item._id)}
+                  className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition duration-200"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

@@ -49,7 +49,7 @@ const Navbar = () => {
                 Read Strategy
               </Link>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <Link className="text-gray-700 hover:text-gray-900 hover:no-underline" to="/tradingchecklist">
                 Trading CheckList
               </Link>
@@ -58,7 +58,7 @@ const Navbar = () => {
               <Link className="text-gray-700 hover:text-gray-900 hover:no-underline" to="/vklevels">
                 Check VK levels
               </Link>
-            </li>
+            </li> */}
             <li className="nav-item">
               <Link
                 to="/tradersdiary"

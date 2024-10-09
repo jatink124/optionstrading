@@ -28,6 +28,9 @@ const StrategyTable = () => {
     fetchStrategies();
   }, []);
 
+  // Sort strategies by creation date (most recent first)
+  const sortedStrategies = [...strategies].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
   const handleAddStrategy = async () => {
     try {
       const response = await axios.post('https://crud-2-6ptv.onrender.com/api/strategies', newStrategy);
@@ -114,50 +117,56 @@ const StrategyTable = () => {
         </button>
       </div>
 
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Today's Strategy</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tasks</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {strategies.map((strategy) => (
-            <tr key={strategy._id}>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {strategy._id}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {strategy.todaysStrategy}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <button
-                  onClick={() => openModal(strategy)}
-                  className="bg-blue-500 text-white p-1"
-                >
-                  View Tasks
-                </button>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <button
-                  onClick={() => handleDeleteStrategy(strategy._id)}
-                  className="bg-red-500 text-white p-1 mr-2"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() => setEditingStrategy(strategy)}
-                  className="bg-yellow-500 text-white p-1 mr-2"
-                >
-                  Edit
-                </button>
-              </td>
+      <div className="overflow-x-auto">
+        <table className="min-w-full w-full table-fixed divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ width: '150px' }}>
+                Today's Strategy
+              </th>
+              <th className="px-6 py-3 w-1/4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tasks</th>
+              <th className="px-6 py-3 w-1/6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
+              <th className="px-6 py-3 w-1/6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {sortedStrategies.map((strategy, index) => (
+              <tr key={strategy._id}>
+                <td
+                  className={`px-2 py-4 ${index === 0 ? 'text-2xl font-bold text-black' : 'text-base text-gray-700'}`}
+                  style={{
+                    width: '650px',
+                    overflow: 'hidden',
+                    whiteSpace: 'normal',
+                    maxHeight: '3rem',
+                    lineHeight: '1.75rem',
+                    fontWeight: index === 0 ? '700' : '500', // Bolder for the latest strategy
+                  }}
+                >
+                  {strategy.todaysStrategy}
+                </td>
+
+                <td className="px-6 py-4 w-1/4 whitespace-nowrap text-sm text-gray-500">
+                  <button onClick={() => openModal(strategy)} className="bg-blue-500 text-white p-1">
+                    View Tasks
+                  </button>
+                </td>
+                <td className="px-6 py-4 w-1/6 whitespace-nowrap text-sm text-gray-500">
+                  {strategy.createdAt}
+                </td>
+                <td className="px-6 py-4 w-1/6 whitespace-nowrap text-sm text-gray-500">
+                  <button onClick={() => handleDeleteStrategy(strategy._id)} className="bg-red-500 text-white p-1 mr-2">
+                    Delete
+                  </button>
+                  <button onClick={() => setEditingStrategy(strategy)} className="bg-yellow-500 text-white p-1 mr-2">
+                    Edit
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {selectedStrategy && (
         <Modal onClose={closeModal}>
@@ -197,16 +206,10 @@ const StrategyTable = () => {
             onChange={(e) => setEditingStrategy({ ...editingStrategy, thingsToDo: e.target.value })}
             className="border p-2 mb-2 w-full"
           />
-          <button
-            onClick={() => handleUpdateStrategy(editingStrategy._id, editingStrategy)}
-            className="bg-green-500 text-white p-2"
-          >
+          <button onClick={() => handleUpdateStrategy(editingStrategy._id, editingStrategy)} className="bg-green-500 text-white p-2">
             Save Changes
           </button>
-          <button
-            onClick={() => setEditingStrategy(null)}
-            className="bg-gray-500 text-white p-2 ml-2"
-          >
+          <button onClick={() => setEditingStrategy(null)} className="bg-gray-500 text-white p-2 ml-2">
             Cancel
           </button>
         </div>

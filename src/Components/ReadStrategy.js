@@ -3,15 +3,34 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReadModal from './ReadModal';
 
+// Helper function to format a date in YYYY-MM-DD format
+const getFormattedDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 const ReadStrategy = () => {
   const [strategies, setStrategies] = useState([]);
+  const [todayStrategy, setTodayStrategy] = useState(null);
   const [selectedStrategy, setSelectedStrategy] = useState(null);
 
   useEffect(() => {
     const fetchStrategies = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/strategies`);
-        setStrategies(response.data);
+
+        // Sort strategies by createdAt date in descending order (most recent first)
+        const sortedStrategies = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        // Set the most recent strategy as today's strategy
+        if (sortedStrategies.length > 0) {
+          setTodayStrategy(sortedStrategies[0]); // Show the most recent strategy first
+        }
+
+        setStrategies(sortedStrategies); // Store sorted strategies
       } catch (error) {
         console.error('Error fetching strategies:', error);
       }
@@ -28,68 +47,38 @@ const ReadStrategy = () => {
     setSelectedStrategy(null);
   };
 
-  const handleTaskStatusChange = (index) => {
-    if (selectedStrategy) {
-      const updatedTasks = selectedStrategy.thingsToDo
-        .split(/[0-9]+\.\s/)
-        .filter(task => task)
-        .map((task, i) => (
-          i === index 
-            ? { task, completed: !selectedStrategy.completedTasks[i] }
-            : { task, completed: selectedStrategy.completedTasks[i] }
-        ));
-
-      setSelectedStrategy({ 
-        ...selectedStrategy, 
-        completedTasks: updatedTasks.map(task => task.completed) 
-      });
-    }
-  };
-
   return (
     <div className="p-8">
-      <h1 className="text-4xl font-bold mb-8 text-gray-800">Strategies</h1>
+   
 
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="px-6 py-4 text-left text-lg font-semibold text-gray-700 uppercase tracking-wide">
-              Today's Strategy
-            </th>
-            <th className="px-6 py-4 text-left text-lg font-semibold text-gray-700 uppercase tracking-wide">
-              List of Things to Do
-            </th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {strategies.map((strategy) => (
-            <tr key={strategy.id}>
-              <td className="px-6 py-6 whitespace-nowrap text-lg text-gray-600">
-                {strategy.todaysStrategy}
-              </td>
-              <td className="px-6 py-6 whitespace-nowrap text-lg text-gray-600">
-                <ul className="list-disc pl-5">
-                  {strategy.thingsToDo.split(/[0-9]+\.\s/).filter(task => task).map((task, index) => (
-                    <li key={index} className="mb-2">{task}</li> 
-                  ))}
-                </ul>
-                <button
-                  onClick={() => handleOpenModal(strategy)}
-                  className="bg-blue-600 text-white font-semibold py-2 px-4 mt-4 rounded hover:bg-blue-700 transition duration-300"
-                >
-                  View
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {todayStrategy ? (
+        <div className="bg-white shadow-lg rounded-lg p-6 w-auto max-w-lg flex-grow mb-8 transform hover:scale-105 transition duration-300 ease-in-out">
+          <h2 className="text-2xl font-bold mb-4 text-gray-800">Most Recent Strategy</h2>
+          <p className="text-lg font-medium text-gray-700 mb-4">{todayStrategy.todaysStrategy}</p>
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">List of Things to Do</h3>
+          <ul className="list-disc pl-5 text-gray-600">
+            {todayStrategy.thingsToDo
+              .split(/[0-9]+\.\s/)
+              .filter(task => task)
+              .map((task, index) => (
+                <li key={index} className="mb-2">{task}</li>
+              ))}
+          </ul>
+          <button
+            onClick={() => handleOpenModal(todayStrategy)}
+            className="bg-blue-600 text-white font-semibold py-2 px-4 mt-4 rounded hover:bg-blue-700 transition duration-300"
+          >
+            View
+          </button>
+        </div>
+      ) : (
+        <p className="text-lg text-gray-600">No strategy available for today.</p>
+      )}
 
       {selectedStrategy && (
         <ReadModal
           strategy={selectedStrategy}
           onClose={handleCloseModal}
-          onTaskStatusChange={handleTaskStatusChange}
         />
       )}
     </div>
