@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { importAll } from './utils/importImages';
 import { Tabs, Tab, Box } from '@mui/material';
+import FAQItem from './images/faq/FaqItem';
+
 
 // Import images
 const candleImages = importAll(require.context('./images/candles', false, /\.(jfif)$/));
 const chartImages = importAll(require.context('./images/charts', false, /\.(jfif)$/));
 const patternImages = importAll(require.context('./images/patterns', false, /\.(jfif)$/));
 const theoryImages = importAll(require.context('./images/theory', false, /\.(jfif)$/));
-
-// Import videos
 const vidVideos = importAll(require.context('./images/vid', false, /\.(mp4)$/));
 
 const mediaData = {
@@ -16,7 +16,7 @@ const mediaData = {
   charts: Object.values(chartImages),
   patterns: Object.values(patternImages),
   theory: Object.values(theoryImages),
-  vid: Object.values(vidVideos)
+  vid: Object.values(vidVideos),
 };
 
 const Tutorials = () => {
@@ -32,6 +32,7 @@ const Tutorials = () => {
         {Object.keys(mediaData).map((folder) => (
           <Tab label={folder} value={folder} key={folder} />
         ))}
+        <Tab label="FAQ" value="faq" /> {/* Add FAQ tab */}
       </Tabs>
 
       {Object.keys(mediaData).map((folder) => (
@@ -74,6 +75,22 @@ const Tutorials = () => {
           )}
         </Box>
       ))}
+
+      {/* FAQ Tab Content */}
+      <Box
+        role="tabpanel"
+        hidden={selectedTab !== 'faq'}
+        id={`tabpanel-faq`}
+        aria-labelledby={`tab-faq`}
+        className="mt-4"
+      >
+        {selectedTab === 'faq' && (
+          <>
+            <h2 className="text-2xl font-bold mb-4">FAQs</h2>
+            <FAQItem />
+          </>
+        )}
+      </Box>
     </div>
   );
 };
