@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { importAll } from './utils/importImages';
 import { Tabs, Tab, Box } from '@mui/material';
 import FAQItem from './images/faq/FaqItem';
+import TradingInsights from './images/faq/TradingInsights';
 
 
 // Import images
@@ -32,7 +33,8 @@ const Tutorials = () => {
         {Object.keys(mediaData).map((folder) => (
           <Tab label={folder} value={folder} key={folder} />
         ))}
-        <Tab label="FAQ" value="faq" /> {/* Add FAQ tab */}
+        <Tab label="Trading Insights" value="trading-insights" /> {/* New Insights Tab */}
+        <Tab label="FAQ" value="faq" /> {/* FAQ tab */}
       </Tabs>
 
       {Object.keys(mediaData).map((folder) => (
@@ -75,6 +77,17 @@ const Tutorials = () => {
           )}
         </Box>
       ))}
+
+      {/* Trading Insights Tab Content */}
+      <Box
+        role="tabpanel"
+        hidden={selectedTab !== 'trading-insights'}
+        id={`tabpanel-trading-insights`}
+        aria-labelledby={`tab-trading-insights`}
+        className="mt-4"
+      >
+        {selectedTab === 'trading-insights' && <TradingInsights />}
+      </Box>
 
       {/* FAQ Tab Content */}
       <Box
