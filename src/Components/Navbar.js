@@ -68,6 +68,13 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="nav-item">
+              <Link
+                to="/learn"
+                className="text-gray-700 hover:bg-gray-300 px-3 py-2 rounded-md text-sm font-medium hover:no-underline"
+              >
+                Learn              </Link>
+            </li>
+            <li className="nav-item">
               <Link className="text-gray-700 hover:text-gray-900 hover:no-underline" to="/marketpredictioninsights">
                 Market Prediction Insights
               </Link>
@@ -80,6 +87,11 @@ const Navbar = () => {
             <li className="nav-item">
               <Link className="text-gray-700 hover:text-gray-900 hover:no-underline" to="/tutorials">
                 Tutorials
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="text-gray-700 hover:text-gray-900 hover:no-underline" to="/papertrading">
+               Paper Trading
               </Link>
             </li>
           

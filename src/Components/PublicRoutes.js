@@ -13,6 +13,8 @@ import Tutorials from './Tutotrials';
 import StrategyTable from './StrategyTable';
 import TradersDiary from './TradersDiary';
 import ReadStrategy from './ReadStrategy';
+import Papertrading from './Papertrading';
+import Learntabs from './Learntabs';
 const PublicRoutes = () => (
   <>
     <Navbar />
@@ -20,6 +22,7 @@ const PublicRoutes = () => (
     <Routes>
       <Route path="/" element={<Mhome />} />
       <Route path="/risk-reward" element={<RiskReward />} />
+      <Route path="/learn" element={<Learntabs/>} />
       <Route path="/tradingchecklist" element={<TradingChecklist />} />
       <Route path="/vklevels" element={<ReadVKResistanceBaseLevels />} />
       <Route path="/marketpredictioninsights" element={<ImportantPoints />} />
@@ -27,6 +30,7 @@ const PublicRoutes = () => (
       <Route path="/tutorials" element={<Tutorials/>} />
     <Route path="/readstrategy" element={<ReadStrategy/>} />
     <Route path="/tradersdiary" element={<TradersDiary />} />
+    <Route path="/papertrading" element={<Papertrading/>} />
       {/* Add more routes as needed */}
     </Routes>
   </>
