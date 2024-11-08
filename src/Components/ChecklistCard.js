@@ -1,4 +1,5 @@
 import React from 'react';
+import checklistItems from '../json/checklist.json';
 
 const ChecklistCard = () => {
   return (
@@ -6,18 +7,9 @@ const ChecklistCard = () => {
       <div className="p-6">
         <h2 className="text-2xl font-bold mb-4 text-gray-800">Trading Checklist</h2>
         <ul className="list-disc list-inside text-gray-700">
-        <li className="mb-2">10/21/15 min Support and Resistance.</li>
-        <li className="mb-2">Big Institutional Support and Resistance.</li> 
-        <li className="mb-2">Wait for Doji candle and Put big SL.</li>
-        <li className="mb-2">Take only 2 lots in banknifty and nifty.</li>
-        <li className="mb-2">After Profit/Loss happened Add record in Trading Journal</li>
-        <li className="mb-2">Apply Kill Switch after 300 Loss and 600 profit</li>
-        <li className="mb-2">Apply Stop Limit Strategy when 5-minute candle is broken.</li>
-       
-        <li className="mb-2">Save money and learning=money</li>
-        <li className="mb-2">Wait and Think</li>
-        
-          <li className="mb-2">Use 10 EMA, 21 EMA, PDH, PDL support method with a high target and a stop loss of 155.</li>
+          {checklistItems.map((item, index) => (
+            <li key={index} className="mb-2">{item}</li>
+          ))}
         </ul>
       </div>
     </div>
@@ -25,3 +17,4 @@ const ChecklistCard = () => {
 };
 
 export default ChecklistCard;
+

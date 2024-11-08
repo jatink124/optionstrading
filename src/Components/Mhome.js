@@ -4,6 +4,7 @@ import ParentComponent from './ParentComponent';
 import ThingsToAchieveCard from './ThingsToAchieveCard';
 import ReadStrategy from './ReadStrategy';
 import VKlevels from '../Crud/VKlevels';
+import PredictionCard from './Home/PredictionCard';
 
 function Mhome() {
   return (
@@ -16,6 +17,11 @@ function Mhome() {
       {/* ParentComponent */}
       <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
         <ParentComponent />
+      </div>
+
+  {/* ParentComponent */}
+  <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+  <PredictionCard/>
       </div>
 
       {/* ThingsToAchieveCard */}
