@@ -15,6 +15,7 @@ import TradersDiary from './TradersDiary';
 import ReadStrategy from './ReadStrategy';
 import Papertrading from './Papertrading';
 import Learntabs from './Learntabs';
+import OptionsTradingCalculatorApp from './OptionsTradingCalculatorApp';
 const PublicRoutes = () => (
   <>
     <Navbar />
@@ -31,6 +32,7 @@ const PublicRoutes = () => (
     <Route path="/readstrategy" element={<ReadStrategy/>} />
     <Route path="/tradersdiary" element={<TradersDiary />} />
     <Route path="/papertrading" element={<Papertrading/>} />
+    <Route path="/optionstradingcalculator" element={<OptionsTradingCalculatorApp/>} />
       {/* Add more routes as needed */}
     </Routes>
   </>

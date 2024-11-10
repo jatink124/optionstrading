@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { importAll } from './utils/importImages';
-import { Tabs, Tab, Box } from '@mui/material';
+import { Tabs, Tab, Box, Modal, Button } from '@mui/material';
 import FAQItem from './images/faq/FaqItem';
 import TradingInsights from './images/faq/TradingInsights';
-
 
 // Import images
 const candleImages = importAll(require.context('./images/candles', false, /\.(jfif)$/));
@@ -22,9 +21,60 @@ const mediaData = {
 
 const Tutorials = () => {
   const [selectedTab, setSelectedTab] = useState('candles');
+  const [zoomImage, setZoomImage] = useState(null);
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState(false);
+  const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
 
   const handleChange = (event, newValue) => {
     setSelectedTab(newValue);
+  };
+
+  const handleZoom = (image) => {
+    setZoomImage(image);
+    setZoomLevel(1);
+    setPosition({ x: 0, y: 0 });
+  };
+
+  const handleCloseZoom = () => {
+    setZoomImage(null);
+    setDragging(false);
+  };
+
+  const zoomIn = () => {
+    setZoomLevel((prev) => Math.min(prev + 0.2, 3));
+  };
+
+  const zoomOut = () => {
+    setZoomLevel((prev) => Math.max(prev - 0.2, 1));
+    setPosition({ x: 0, y: 0 });
+  };
+
+  const resetZoom = () => {
+    setZoomLevel(1);
+    setPosition({ x: 0, y: 0 });
+  };
+
+  const handleMouseDown = (e) => {
+    setDragging(true);
+    setStartPosition({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y,
+    });
+  };
+
+  const handleMouseMove = (e) => {
+    if (dragging) {
+      setPosition({
+        x: e.clientX - startPosition.x,
+        y: e.clientY - startPosition.y,
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setDragging(false);
   };
 
   return (
@@ -33,8 +83,8 @@ const Tutorials = () => {
         {Object.keys(mediaData).map((folder) => (
           <Tab label={folder} value={folder} key={folder} />
         ))}
-        <Tab label="Trading Insights" value="trading-insights" /> {/* New Insights Tab */}
-        <Tab label="FAQ" value="faq" /> {/* FAQ tab */}
+        <Tab label="Trading Insights" value="trading-insights" />
+        <Tab label="FAQ" value="faq" />
       </Tabs>
 
       {Object.keys(mediaData).map((folder) => (
@@ -67,7 +117,8 @@ const Tutorials = () => {
                       <img
                         src={image}
                         alt={`${folder} Image ${index + 1}`}
-                        className="w-full h-auto"
+                        className="w-full h-auto cursor-pointer"
+                        onClick={() => handleZoom(image)}
                       />
                     </div>
                   ))
@@ -78,32 +129,38 @@ const Tutorials = () => {
         </Box>
       ))}
 
-      {/* Trading Insights Tab Content */}
-      <Box
-        role="tabpanel"
-        hidden={selectedTab !== 'trading-insights'}
-        id={`tabpanel-trading-insights`}
-        aria-labelledby={`tab-trading-insights`}
-        className="mt-4"
-      >
-        {selectedTab === 'trading-insights' && <TradingInsights />}
-      </Box>
-
-      {/* FAQ Tab Content */}
-      <Box
-        role="tabpanel"
-        hidden={selectedTab !== 'faq'}
-        id={`tabpanel-faq`}
-        aria-labelledby={`tab-faq`}
-        className="mt-4"
-      >
-        {selectedTab === 'faq' && (
-          <>
-            <h2 className="text-2xl font-bold mb-4">FAQs</h2>
-            <FAQItem />
-          </>
-        )}
-      </Box>
+      {/* Zoom Modal */}
+      <Modal open={!!zoomImage} onClose={handleCloseZoom} className="flex justify-center items-center">
+        <div className="bg-white p-4 rounded-lg shadow-lg max-w-4xl max-h-[90vh] relative">
+          {zoomImage && (
+            <div className="flex flex-col items-center">
+              <div
+                className="overflow-hidden cursor-move"
+                style={{ width: '100%', height: '80vh', position: 'relative' }}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+              >
+                <img
+                  src={zoomImage}
+                  alt="Zoomed"
+                  style={{
+                    transform: `scale(${zoomLevel}) translate(${position.x}px, ${position.y}px)`,
+                    cursor: dragging ? 'grabbing' : 'grab',
+                  }}
+                  className="transition-transform duration-200 object-contain"
+                />
+              </div>
+              <div className="flex space-x-4 mt-4">
+                <Button variant="contained" onClick={zoomIn}>Zoom In</Button>
+                <Button variant="contained" onClick={zoomOut}>Zoom Out</Button>
+                <Button variant="contained" onClick={resetZoom}>Reset</Button>
+              </div>
+            </div>
+          )}
+        </div>
+      </Modal>
     </div>
   );
 };
