@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { importAll } from './utils/importImages';
 import { Tabs, Tab, Box, Modal, Button } from '@mui/material';
-import FAQItem from './images/faq/FaqItem';
-import TradingInsights from './images/faq/TradingInsights';
+import FAQItem from './faq/FaqItem';
+import TradingInsights from './faq/TradingInsights';
 
 // Import images
 const candleImages = importAll(require.context('./images/candles', false, /\.(jfif)$/));
@@ -17,6 +17,11 @@ const mediaData = {
   patterns: Object.values(patternImages),
   theory: Object.values(theoryImages),
   vid: Object.values(vidVideos),
+};
+
+const TAB_KEYS = {
+  TRADING_INSIGHTS: 'trading-insights',
+  FAQ: 'faq',
 };
 
 const Tutorials = () => {
@@ -79,21 +84,21 @@ const Tutorials = () => {
 
   return (
     <div className="p-4">
+      {/* Tabs Section */}
       <Tabs value={selectedTab} onChange={handleChange} aria-label="media tabs">
         {Object.keys(mediaData).map((folder) => (
           <Tab label={folder} value={folder} key={folder} />
         ))}
-        <Tab label="Trading Insights" value="trading-insights" />
-        <Tab label="FAQ" value="faq" />
+        <Tab label="Trading Insights" value={TAB_KEYS.TRADING_INSIGHTS} />
+        <Tab label="FAQ" value={TAB_KEYS.FAQ} />
       </Tabs>
 
+      {/* Dynamic Media Tabs */}
       {Object.keys(mediaData).map((folder) => (
         <Box
           role="tabpanel"
           hidden={selectedTab !== folder}
           key={folder}
-          id={`tabpanel-${folder}`}
-          aria-labelledby={`tab-${folder}`}
           className="mt-4"
         >
           {selectedTab === folder && (
@@ -128,6 +133,19 @@ const Tutorials = () => {
           )}
         </Box>
       ))}
+
+      {/* Static Tabs */}
+      {selectedTab === TAB_KEYS.TRADING_INSIGHTS && (
+        <div className="mt-4">
+          <TradingInsights />
+        </div>
+      )}
+
+      {selectedTab === TAB_KEYS.FAQ && (
+        <div className="mt-4">
+          <FAQItem />
+        </div>
+      )}
 
       {/* Zoom Modal */}
       <Modal open={!!zoomImage} onClose={handleCloseZoom} className="flex justify-center items-center">
