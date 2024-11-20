@@ -16,6 +16,9 @@ import ReadStrategy from './ReadStrategy';
 import Papertrading from './Papertrading';
 import Learntabs from './Learntabs';
 import OptionsTradingCalculatorApp from './OptionsTradingCalculatorApp';
+import OptionsPerformanceTracker from './OptionsPerformanceTracker';
+import Ledger from './dhan/Ledger';
+import OptionTradingStrategy from './OptionsTradingStrategy';
 const PublicRoutes = () => (
   <>
     <Navbar />
@@ -33,6 +36,8 @@ const PublicRoutes = () => (
     <Route path="/tradersdiary" element={<TradersDiary />} />
     <Route path="/papertrading" element={<Papertrading/>} />
     <Route path="/optionstradingcalculator" element={<OptionsTradingCalculatorApp/>} />
+    <Route path="/optionsperformancetracker" element={<OptionsPerformanceTracker/>} />
+    <Route path="/ots" element={<OptionTradingStrategy/>} />
       {/* Add more routes as needed */}
     </Routes>
   </>

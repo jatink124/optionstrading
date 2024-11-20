@@ -5,6 +5,7 @@ import ThingsToAchieveCard from './ThingsToAchieveCard';
 import ReadStrategy from './ReadStrategy';
 import VKlevels from '../Crud/VKlevels';
 import PredictionCard from './Home/PredictionCard';
+import Showotstrategy from './Showotstrategy';
 
 function Mhome() {
   return (
@@ -13,7 +14,10 @@ function Mhome() {
       <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
         <ChecklistCard />
       </div>
-
+ {/* OptionTradingStrategy */}
+ <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+       <Showotstrategy/>
+      </div>
       {/* ParentComponent */}
       <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
         <ParentComponent />
@@ -30,14 +34,15 @@ function Mhome() {
       </div>
 
       {/* ReadStrategy */}
-      <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+      {/* <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
         <ReadStrategy />
-      </div>
+      </div> */}
 
       {/* VKlevels */}
       <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
         <VKlevels />
       </div>
+      
     </div>
   );
 }
