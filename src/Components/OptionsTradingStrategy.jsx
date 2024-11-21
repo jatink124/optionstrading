@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const OptionTradingStrategy = () => {
   const [strategy, setStrategy] = useState({
@@ -6,12 +6,22 @@ const OptionTradingStrategy = () => {
     strategyName: '',
   });
 
-  const [strategies, setStrategies] = useState(() =>
-    JSON.parse(localStorage.getItem('strategies')) || []
-  );
-
+  const [strategies, setStrategies] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
+
+  // Fetch JSON data on component mount
+  useEffect(() => {
+    fetch('/strategies.json') // Path to the JSON file in the public folder
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => setStrategies(data))
+      .catch((error) => console.error('Error fetching strategies:', error));
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,18 +34,16 @@ const OptionTradingStrategy = () => {
         index === editIndex ? strategy : s
       );
       setStrategies(updatedStrategies);
-      localStorage.setItem('strategies', JSON.stringify(updatedStrategies));
-      setIsEditing(false);
-      setEditIndex(null);
     } else {
       const updatedStrategies = [...strategies, strategy];
       setStrategies(updatedStrategies);
-      localStorage.setItem('strategies', JSON.stringify(updatedStrategies));
     }
     setStrategy({
       timeframe: 'Next Day',
       strategyName: '',
     });
+    setIsEditing(false);
+    setEditIndex(null);
   };
 
   const editStrategy = (index) => {
@@ -47,7 +55,6 @@ const OptionTradingStrategy = () => {
   const deleteStrategy = (index) => {
     const updatedStrategies = strategies.filter((_, i) => i !== index);
     setStrategies(updatedStrategies);
-    localStorage.setItem('strategies', JSON.stringify(updatedStrategies));
   };
 
   const exportToJSON = () => {
@@ -80,12 +87,12 @@ const OptionTradingStrategy = () => {
 
         <label className="block mb-2">Strategy Name</label>
         <textarea
-  name="strategyName"
-  value={strategy.strategyName}
-  onChange={handleChange}
-  className="block w-full h-24 p-4 mb-4 border rounded resize-none"
-  placeholder="Enter strategy name"
-></textarea>
+          name="strategyName"
+          value={strategy.strategyName}
+          onChange={handleChange}
+          className="block w-full h-24 p-4 mb-4 border rounded resize-none"
+          placeholder="Enter strategy name"
+        ></textarea>
 
         <button
           onClick={addOrUpdateStrategy}
