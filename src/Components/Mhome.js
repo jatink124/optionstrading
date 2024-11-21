@@ -1,77 +1,61 @@
 import React, { useState } from 'react';
+import Select from 'react-select'; // Import React Select
 import ChecklistCard from './ChecklistCard';
 import ParentComponent from './ParentComponent';
 import ThingsToAchieveCard from './ThingsToAchieveCard';
-import ReadStrategy from './ReadStrategy';
 import VKlevels from '../Crud/VKlevels';
-import PredictionCard from './Home/PredictionCard';
 import Showotstrategy from './Showotstrategy';
+import PredictionCard from './Home/PredictionCard';
 
 function Mhome() {
-  const [selectedComponent, setSelectedComponent] = useState('');
+  const [selectedComponents, setSelectedComponents] = useState([]);
 
-  // Handle dropdown selection
-  const handleDropdownChange = (e) => {
-    setSelectedComponent(e.target.value);
+  const componentsMap = {
+    ChecklistCard,
+    ParentComponent,
+    ThingsToAchieveCard,
+    VKlevels,
+    Showotstrategy,
+    PredictionCard,
+  };
+
+  const options = [
+    { value: 'ChecklistCard', label: 'Checklist Card' },
+    { value: 'ParentComponent', label: 'Parent Component' },
+    { value: 'ThingsToAchieveCard', label: 'Things To Achieve Card' },
+    { value: 'VKlevels', label: 'VK Levels' },
+    { value: 'Showotstrategy', label: 'Show OT Strategy' },
+    { value: 'PredictionCard', label: 'Prediction Card' },
+  ];
+
+  const handleChange = (selectedOptions) => {
+    setSelectedComponents(selectedOptions.map((option) => option.value));
   };
 
   return (
     <div className="p-4">
-      {/* Dropdown for selecting the component */}
+      {/* Tagging Dropdown */}
       <div className="mb-4">
-        <label className="block mb-2 font-semibold">Select Component</label>
-        <select
-          className="p-2 border rounded"
-          onChange={handleDropdownChange}
-          value={selectedComponent}
-        >
-          <option value="">Select</option>
-          <option value="ChecklistCard">ChecklistCard</option>
-          <option value="Showotstrategy">Showotstrategy</option>
-          <option value="ParentComponent">ParentComponent</option>
-          <option value="PredictionCard">PredictionCard</option>
-          <option value="ThingsToAchieveCard">ThingsToAchieveCard</option>
-          <option value="VKlevels">VKlevels</option>
-        </select>
+        <label className="block mb-2 font-semibold">Select Components</label>
+        <Select
+          isMulti
+          options={options}
+          onChange={handleChange}
+          placeholder="Select components..."
+          className="w-full"
+        />
       </div>
 
-      {/* Conditionally render components based on dropdown selection */}
+      {/* Dynamically Render Selected Components */}
       <div className="flex flex-wrap justify-center gap-4">
-        {selectedComponent === 'ChecklistCard' && (
-          <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
-            <ChecklistCard />
-          </div>
-        )}
-
-        {selectedComponent === 'Showotstrategy' && (
-          <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
-            <Showotstrategy />
-          </div>
-        )}
-
-        {selectedComponent === 'ParentComponent' && (
-          <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
-            <ParentComponent />
-          </div>
-        )}
-
-        {selectedComponent === 'PredictionCard' && (
-          <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
-            <PredictionCard />
-          </div>
-        )}
-
-        {selectedComponent === 'ThingsToAchieveCard' && (
-          <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
-            <ThingsToAchieveCard />
-          </div>
-        )}
-
-        {selectedComponent === 'VKlevels' && (
-          <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
-            <VKlevels />
-          </div>
-        )}
+        {selectedComponents.map((componentName) => {
+          const Component = componentsMap[componentName];
+          return (
+            <div key={componentName} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+              <Component />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
