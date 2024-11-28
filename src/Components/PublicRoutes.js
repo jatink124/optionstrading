@@ -19,6 +19,7 @@ import OptionsTradingCalculatorApp from './OptionsTradingCalculatorApp';
 import OptionsPerformanceTracker from './OptionsPerformanceTracker';
 import Ledger from './dhan/Ledger';
 import OptionTradingStrategy from './OptionsTradingStrategy';
+import TradeTable from './TradeTable';
 const PublicRoutes = () => (
   <>
     <Navbar />
@@ -38,6 +39,7 @@ const PublicRoutes = () => (
     <Route path="/optionstradingcalculator" element={<OptionsTradingCalculatorApp/>} />
     <Route path="/optionsperformancetracker" element={<OptionsPerformanceTracker/>} />
     <Route path="/ots" element={<OptionTradingStrategy/>} />
+    <Route path="/tradetable" element={<TradeTable/>} />
       {/* Add more routes as needed */}
     </Routes>
   </>
