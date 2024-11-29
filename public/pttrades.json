@@ -1,0 +1,13 @@
+[
+  {
+    "tradeName": "ccxb",
+    "type": "call",
+    "index": "Bank Nifty",
+    "lotSize": 15,
+    "entryPrice": "65",
+    "exitPrice": "",
+    "strategy": "Institutional Resistance",
+    "livePrice": "",
+    "dateTime": "2024-11-30T10:40"
+  }
+]

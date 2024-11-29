@@ -1,27 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Papertrading = () => {
   const [trade, setTrade] = useState({
+    tradeName: '',
     type: 'call',
     index: 'Bank Nifty',
     lotSize: 15,
     entryPrice: '',
     exitPrice: '',
     strategy: 'Institutional Resistance',
-    livePrice: '',
+    profit: 0,
+    targetHit: false,
+    stoplossHit: false,
   });
 
-  const [trades, setTrades] = useState(() => JSON.parse(localStorage.getItem('trades')) || []);
+  const [trades, setTrades] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
-  const [isLivePriceChecked, setIsLivePriceChecked] = useState(false);
+
+  useEffect(() => {
+    const localData = JSON.parse(localStorage.getItem('trades'));
+    if (localData) {
+      setTrades(localData);
+    }
+  }, []);
+
+  useEffect(() => {
+    calculateProfit();
+  }, [trade.entryPrice, trade.exitPrice]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setTrade((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setTrade((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
+  const calculateProfit = () => {
+    if (trade.entryPrice && trade.exitPrice) {
+      const profit = (trade.exitPrice - trade.entryPrice) * trade.lotSize - 49;
+      setTrade((prev) => ({
+        ...prev,
+        profit: parseFloat(profit.toFixed(2)),
+      }));
+    }
   };
 
   const addOrUpdateTrade = () => {
+    if (!trade.entryPrice || !trade.exitPrice) {
+      alert('Please enter both Entry Price and Exit Price.');
+      return;
+    }
+
     if (isEditing) {
       const updatedTrades = trades.map((t, index) =>
         index === editIndex ? trade : t
@@ -35,23 +66,25 @@ const Papertrading = () => {
       setTrades(updatedTrades);
       localStorage.setItem('trades', JSON.stringify(updatedTrades));
     }
+
     setTrade({
+      tradeName: '',
       type: 'call',
       index: 'Bank Nifty',
       lotSize: 15,
       entryPrice: '',
       exitPrice: '',
       strategy: 'Institutional Resistance',
-      livePrice: '',
+      profit: 0,
+      targetHit: false,
+      stoplossHit: false,
     });
-    setIsLivePriceChecked(false);
   };
 
   const editTrade = (index) => {
     setTrade(trades[index]);
     setIsEditing(true);
     setEditIndex(index);
-    setIsLivePriceChecked(!!trades[index].livePrice);
   };
 
   const deleteTrade = (index) => {
@@ -66,7 +99,7 @@ const Papertrading = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'trades.json';
+    link.download = 'pttrades.json';
     link.click();
   };
 
@@ -76,40 +109,54 @@ const Papertrading = () => {
       <div className="w-1/2">
         <h2 className="text-2xl font-bold mb-4">Paper Trading App</h2>
 
+        <label className="block mb-2">Trade Name</label>
+        <input
+          type="text"
+          name="tradeName"
+          value={trade.tradeName}
+          onChange={handleChange}
+          className="block w-full p-2 mb-4 border rounded"
+        />
+
         <label className="block mb-2">Type of Trade</label>
-        <select name="type" value={trade.type} onChange={handleChange} className="block w-full p-2 mb-4 border rounded">
+        <select
+          name="type"
+          value={trade.type}
+          onChange={handleChange}
+          className="block w-full p-2 mb-4 border rounded"
+        >
           <option value="call">Call</option>
           <option value="put">Put</option>
         </select>
 
         <label className="block mb-2">Index</label>
-        <select name="index" value={trade.index} onChange={handleChange} className="block w-full p-2 mb-4 border rounded">
+        <select
+          name="index"
+          value={trade.index}
+          onChange={handleChange}
+          className="block w-full p-2 mb-4 border rounded"
+        >
           <option value="Bank Nifty">Bank Nifty</option>
           <option value="Nifty">Nifty</option>
         </select>
 
         <label className="block mb-2">Lot Size</label>
-        <select name="lotSize" value={trade.lotSize} onChange={handleChange} className="block w-full p-2 mb-4 border rounded">
-          {[15, 25, 30, 45, 50, 60, 75, 90, 105].map((size) => (
-            <option key={size} value={size}>{size}</option>
-          ))}
-        </select>
-
-        <label className="block mb-2">Live Price</label>
-        <input type="number" name="livePrice" value={trade.livePrice} onChange={handleChange} className="block w-full p-2 mb-4 border rounded" />
-
-        <label className="block mb-2">
-          <input
-            type="checkbox"
-            checked={isLivePriceChecked}
-            onChange={() => setIsLivePriceChecked(!isLivePriceChecked)}
-            className="mr-2"
-          />
-          Confirm Live Price for Entry
-        </label>
+        <input
+          type="number"
+          name="lotSize"
+          value={trade.lotSize}
+          onChange={handleChange}
+          className="block w-full p-2 mb-4 border rounded"
+        />
 
         <label className="block mb-2">Entry Price</label>
-        <input type="number" name="entryPrice" value={trade.entryPrice} onChange={handleChange} className="block w-full p-2 mb-4 border rounded" />
+        <input
+          type="number"
+          name="entryPrice"
+          value={trade.entryPrice}
+          onChange={handleChange}
+          className="block w-full p-2 mb-4 border rounded"
+        />
 
         <label className="block mb-2">Exit Price</label>
         <input
@@ -118,15 +165,37 @@ const Papertrading = () => {
           value={trade.exitPrice}
           onChange={handleChange}
           className="block w-full p-2 mb-4 border rounded"
-          disabled={!isLivePriceChecked}
         />
 
-        <label className="block mb-2">Strategy</label>
-        <select name="strategy" value={trade.strategy} onChange={handleChange} className="block w-full p-2 mb-4 border rounded">
-          {['Institutional Resistance', 'Institutional Support', '10Dema', '20Dema', '50Dema', '100Dema'].map((strategy) => (
-            <option key={strategy} value={strategy}>{strategy}</option>
-          ))}
-        </select>
+        <label className="block mb-2">Profit</label>
+        <input
+          type="number"
+          value={trade.profit}
+          readOnly
+          className="block w-full p-2 mb-4 border rounded bg-gray-100"
+        />
+
+        <label className="block mb-2">
+          <input
+            type="checkbox"
+            name="targetHit"
+            checked={trade.targetHit}
+            onChange={handleChange}
+            className="mr-2"
+          />
+          Target Hit
+        </label>
+
+        <label className="block mb-2">
+          <input
+            type="checkbox"
+            name="stoplossHit"
+            checked={trade.stoplossHit}
+            onChange={handleChange}
+            className="mr-2"
+          />
+          Stop Loss Hit
+        </label>
 
         <button
           onClick={addOrUpdateTrade}
@@ -134,7 +203,12 @@ const Papertrading = () => {
         >
           {isEditing ? 'Update Trade' : 'Add Trade'}
         </button>
-        <button onClick={exportToJSON} className="bg-green-500 text-white p-2 rounded w-full mb-4">Export to JSON</button>
+        <button
+          onClick={exportToJSON}
+          className="bg-green-500 text-white p-2 rounded w-full mb-4"
+        >
+          Export to JSON
+        </button>
       </div>
 
       {/* Trade List Section */}
@@ -144,20 +218,43 @@ const Papertrading = () => {
           <p className="text-gray-500">No trades added yet.</p>
         ) : (
           trades.map((t, index) => (
-            <div key={index} className="border p-2 mb-2 rounded flex justify-between items-center">
+            <div
+              key={index}
+              className="border p-2 mb-2 rounded flex justify-between items-center"
+            >
               <div>
-                <p><strong>Type:</strong> {t.type}</p>
-                <p><strong>Index:</strong> {t.index}</p>
-                <p><strong>Lot Size:</strong> {t.lotSize}</p>
-                <p><strong>Live Price:</strong> {t.livePrice}</p>
-                <p><strong>Entry Price:</strong> {t.entryPrice}</p>
-                <p><strong>Exit Price:</strong> {t.exitPrice}</p>
-                <p><strong>Strategy:</strong> {t.strategy}</p>
+                <p>
+                  <strong>Trade Name:</strong> {t.tradeName}
+                </p>
+                <p>
+                  <strong>Type:</strong> {t.type}
+                </p>
+                <p>
+                  <strong>Index:</strong> {t.index}
+                </p>
+                <p>
+                  <strong>Lot Size:</strong> {t.lotSize}
+                </p>
+                <p>
+                  <strong>Entry Price:</strong> {t.entryPrice}
+                </p>
+                <p>
+                  <strong>Exit Price:</strong> {t.exitPrice}
+                </p>
+                <p>
+                  <strong>Profit:</strong> {t.profit}
+                </p>
+                <p>
+                  <strong>Target Hit:</strong> {t.targetHit ? 'Yes' : 'No'}
+                </p>
+                <p>
+                  <strong>Stop Loss Hit:</strong> {t.stoplossHit ? 'Yes' : 'No'}
+                </p>
               </div>
-              <div>
+              <div className="flex flex-col space-y-2">
                 <button
                   onClick={() => editTrade(index)}
-                  className="bg-yellow-500 text-white p-1 rounded mr-2"
+                  className="bg-yellow-500 text-white p-1 rounded"
                 >
                   Edit
                 </button>
