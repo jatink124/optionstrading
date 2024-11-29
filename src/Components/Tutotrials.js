@@ -85,13 +85,50 @@ const Tutorials = () => {
   return (
     <div className="p-4">
       {/* Tabs Section */}
-      <Tabs value={selectedTab} onChange={handleChange} aria-label="media tabs">
-        {Object.keys(mediaData).map((folder) => (
-          <Tab label={folder} value={folder} key={folder} />
-        ))}
-        <Tab label="Trading Insights" value={TAB_KEYS.TRADING_INSIGHTS} />
-        <Tab label="FAQ" value={TAB_KEYS.FAQ} />
-      </Tabs>
+      <Tabs
+  value={selectedTab}
+  onChange={handleChange}
+  aria-label="media tabs"
+  variant="scrollable" // Enables horizontal scrolling
+  scrollButtons="auto" // Shows scroll buttons if necessary
+  allowScrollButtonsMobile // Enables scroll buttons for mobile
+  className="border-b" // Optional styling for a cleaner look
+>
+  {Object.keys(mediaData).map((folder) => (
+    <Tab
+      label={folder}
+      value={folder}
+      key={folder}
+      sx={{
+        fontSize: '0.875rem', // Adjust font size for better fit
+        minWidth: 'auto', // Prevent unnecessary width
+        padding: '8px 12px', // Compact padding for mobile
+        textTransform: 'capitalize', // Keep labels readable
+      }}
+    />
+  ))}
+  <Tab
+    label="Trading Insights"
+    value={TAB_KEYS.TRADING_INSIGHTS}
+    sx={{
+      fontSize: '0.875rem',
+      minWidth: 'auto',
+      padding: '8px 12px',
+      textTransform: 'capitalize',
+    }}
+  />
+  <Tab
+    label="FAQ"
+    value={TAB_KEYS.FAQ}
+    sx={{
+      fontSize: '0.875rem',
+      minWidth: 'auto',
+      padding: '8px 12px',
+      textTransform: 'capitalize',
+    }}
+  />
+</Tabs>
+
 
       {/* Dynamic Media Tabs */}
       {Object.keys(mediaData).map((folder) => (
