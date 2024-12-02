@@ -1,14 +1,18 @@
-// DailyReport.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import DataEntryForm from './DataEntryForm';
+import DailyReportenteriesTable from './DailyReportenteriesTable';
+import DataEntryForm from '../../Components/DataEntryForm';
+import DataDisplay from '../../Components/DataDisplay';
+import DailyReport from '../public/DailyReport';
 
-const DailyReportsubmit = () => {
+
+const DailyLearningEntries = () => {
   const [reportData, setReportData] = useState([]);
 
+  // Function to fetch report data
   const fetchReportData = () => {
-    axios.get('http://localhost:5000/repdata')
+    axios.get('https://crud-2-6ptv.onrender.com/api/dailylearningentries')
       .then(response => {
         setReportData(response.data);
       })
@@ -17,16 +21,17 @@ const DailyReportsubmit = () => {
       });
   };
 
+  // Fetch data on component mount
   useEffect(() => {
     fetchReportData();
   }, []);
 
   return (
     <div>
-  
       <DataEntryForm onEntryAdded={fetchReportData} />
+ <DailyReport/>
     </div>
   );
 };
 
-export default DailyReportsubmit;
+export default DailyLearningEntries;

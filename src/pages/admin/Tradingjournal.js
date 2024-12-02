@@ -2,9 +2,9 @@ import API_BASE_URL from './config';
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Authentication from './Authentication';
-import TradingChecklist from './TradingChecklist';
-import TradingJournalList from './TradingjournalList';
+import Authentication from '../../Components/Authentication';
+import TradingChecklist from '../public/TradingChecklist';
+import TradingJournalList from '../public/TradingjournalList';
 
 const Tradingjournal = () => {
   const [authenticated, setAuthenticated] = useState(false);

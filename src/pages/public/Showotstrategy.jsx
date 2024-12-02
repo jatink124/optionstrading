@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import StrategyList from './StrategyList';
+import StrategyList from '../../Components/StrategyList';
 
 const Showotstrategy = () => {
   const [strategies, setStrategies] = useState([]);

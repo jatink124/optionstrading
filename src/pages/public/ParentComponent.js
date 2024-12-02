@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TradingjournalListprice from './TradingjournalListprice';
+import TradingjournalListprice from '../../Components/TradingjournalListprice';
 import TotalProfitLossDisplay from './TotalProfitLossDisplay';
 
 const ParentComponent = () => {

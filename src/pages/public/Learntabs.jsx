@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import Learn from './Learn';
-import LeverageInfo from './Learn/Leverageinfo';
-import BusinessModels from './Learn/BusinessModels';
-import Webdesignhostingrelationship from './Learn/Webdesignhostingrelationship';
-import HostingTables from './Learn/HostingTables';
+import Learn from '../../Components/Learn';
+import LeverageInfo from '../../Components/Learn/Leverageinfo';
+import BusinessModels from '../../Components/Learn/BusinessModels';
+import Webdesignhostingrelationship from '../../Components/Learn/Webdesignhostingrelationship';
+import HostingTables from '../../Components/Learn/HostingTables';
 
 const Learntabs = () => {
   const [activeTab, setActiveTab] = useState('LeverageInfo');

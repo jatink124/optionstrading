@@ -1,5 +1,5 @@
 import React from 'react';
-import MakeTodayCountCard from './MakeTodayCountCard';
+import MakeTodayCountCard from '../../Components/MakeTodayCountCard';
 
 const ZeroProfitLossComponent = () => (
   <div className="text-lg mt-2 text-gray-500">

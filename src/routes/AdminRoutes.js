@@ -2,19 +2,19 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import AdminDropdown from './AdminDropdown';
-import DailyReport from './DailyReport';
-import CreateComponent from '../Crud/CreateComponent';
-import Tradingjournal from './Tradingjournal';
-import TradersDiary from './TradersDiary';
-import MultiSelectDropdown from './MultiSelectDropdown';
+import DailyReport from '../pages/public/DailyReport';
+import CreateComponent from '../pages/admin/CreateComponent';
+import Tradingjournal from '../pages/admin/Tradingjournal';
+import TradersDiary from '../pages/public/TradersDiary';
+import MultiSelectDropdown from '../pages/admin/MultiSelectDropdown';
 
-import DailyReportenteriesTable from './DailyReportenteriesTable';
-import DailyLearningEntries from './DailyLearningEntries';
-import DailyReportsubmit from './DailyReportsubmit';
-import EnterTradePredictions from './EnterTradePredictions';
-import StrategyTable from './StrategyTable';
-import WebsiteList from './utils/WebsiteList';
-import { websites } from './utils//websitesData';  // Ensure this path is correct
+import DailyReportenteriesTable from '../pages/admin/DailyReportenteriesTable';
+import DailyLearningEntries from '../pages/admin/DailyLearningEntries';
+import DailyReportsubmit from '../pages/admin/DailyReportsubmit';
+import EnterTradePredictions from '../pages/admin/EnterTradePredictions';
+import StrategyTable from '../pages/admin/StrategyTable';
+import WebsiteList from '../pages/public/utils/WebsiteList';
+import { websites } from '../pages/public/utils/websitesData';  // Ensure this path is correct
 const AdminRoutes = () => (
   <>
     <AdminDropdown />

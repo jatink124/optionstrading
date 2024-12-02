@@ -1,0 +1,61 @@
+{
+    "title": "Morning Trading Plan",
+    "sections": [
+      {
+        "title": "Mindset Check",
+        "items": [
+          "Stay Disciplined: Follow your plan, no emotional trades.",
+          "Accept Risk: Losses are part of the game; focus on execution.",
+          "Focus on Process: Winning comes from consistency, not shortcuts."
+        ]
+      },
+      {
+        "title": "Market Overview",
+        "items": [
+          "Check global markets and major indices (Dow, S&P 500, SGX Nifty).",
+          "Review any relevant news/events (economic data, earnings).",
+          "Analyze pre-market sentiment (gap up, gap down, flat open)."
+        ]
+      },
+      {
+        "title": "Technical Analysis",
+        "items": [
+          "Identify key levels (support/resistance, trendlines, EMAs).",
+          "Note previous day’s high/low and pivot points."
+        ]
+      },
+      {
+        "title": "Strategy Checklist",
+        "items": [
+          "Define Your Trade: Index (Bank Nifty/Nifty), Trade Type (Call/Put).",
+          "Entry Criteria: Enter near support or resistance breaks with confirmation.",
+          "Exit Criteria: Predefined profit target and stop-loss."
+        ]
+      },
+      {
+        "title": "Risk Management",
+        "items": [
+          "Daily loss limit: Stop trading after 2-3 failed trades.",
+          "Limit trades: Stick to 2-3 quality trades only.",
+          "Position sizing: Calculate lot size based on capital and risk."
+        ]
+      },
+      {
+        "title": "Execution Rules",
+        "items": [
+          "Avoid trading in the first 15 minutes unless a setup is clear.",
+          "Use alerts for levels, don’t overanalyze.",
+          "Follow your predefined checklist card."
+        ]
+      },
+      {
+        "title": "End-of-Day Reflection",
+        "items": [
+          "Commit to journaling every trade (entry, exit, reasoning).",
+          "Evaluate execution, not just results."
+        ]
+      }
+    ],
+    "motivationalReminder": "Discipline and patience are your edge. Execute the plan, and the profits will follow."
+  }
+  

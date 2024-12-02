@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './index.css';
 
-import PublicRoutes from './Components/PublicRoutes';
-import AdminRoutes from './Components/AdminRoutes';
+import PublicRoutes from './routes/PublicRoutes';
+import AdminRoutes from './routes/AdminRoutes';
 
 const queryClient = new QueryClient();
 

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import PredictionRead from './PredictionRead';
+import PredictionRead from '../../Components/PredictionRead';
 
 function ImportantPoints() {
   const [date, setDate] = useState(new Date());

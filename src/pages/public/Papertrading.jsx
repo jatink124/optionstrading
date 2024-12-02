@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const Papertrading = () => {
   const [trade, setTrade] = useState({
-    tradeName: '',
-    type: 'call',
-    index: 'Bank Nifty',
+    tradeName: "",
+    type: "call",
+    index: "Bank Nifty",
     lotSize: 15,
-    entryPrice: '',
-    exitPrice: '',
-    strategy: 'Institutional Resistance',
+    entryPrice: "",
+    exitPrice: "",
+    strategy: "Institutional Resistance",
     profit: 0,
     targetHit: false,
     stoplossHit: false,
+    enableExitPrice: false,
   });
 
   const [trades, setTrades] = useState([]);
@@ -19,7 +20,7 @@ const Papertrading = () => {
   const [editIndex, setEditIndex] = useState(null);
 
   useEffect(() => {
-    const localData = JSON.parse(localStorage.getItem('trades'));
+    const localData = JSON.parse(localStorage.getItem("trades"));
     if (localData) {
       setTrades(localData);
     }
@@ -33,7 +34,7 @@ const Papertrading = () => {
     const { name, value, type, checked } = e.target;
     setTrade((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -48,8 +49,8 @@ const Papertrading = () => {
   };
 
   const addOrUpdateTrade = () => {
-    if (!trade.entryPrice || !trade.exitPrice) {
-      alert('Please enter both Entry Price and Exit Price.');
+    if (!trade.entryPrice) {
+      alert("Please enter both Entry Price and Exit Price.");
       return;
     }
 
@@ -58,26 +59,27 @@ const Papertrading = () => {
         index === editIndex ? trade : t
       );
       setTrades(updatedTrades);
-      localStorage.setItem('trades', JSON.stringify(updatedTrades));
+      localStorage.setItem("trades", JSON.stringify(updatedTrades));
       setIsEditing(false);
       setEditIndex(null);
     } else {
       const updatedTrades = [...trades, trade];
       setTrades(updatedTrades);
-      localStorage.setItem('trades', JSON.stringify(updatedTrades));
+      localStorage.setItem("trades", JSON.stringify(updatedTrades));
     }
 
     setTrade({
-      tradeName: '',
-      type: 'call',
-      index: 'Bank Nifty',
+      tradeName: "",
+      type: "call",
+      index: "Bank Nifty",
       lotSize: 15,
-      entryPrice: '',
-      exitPrice: '',
-      strategy: 'Institutional Resistance',
+      entryPrice: "",
+      exitPrice: "",
+      strategy: "Institutional Resistance",
       profit: 0,
       targetHit: false,
       stoplossHit: false,
+      enableExitPrice: false,
     });
   };
 
@@ -90,16 +92,16 @@ const Papertrading = () => {
   const deleteTrade = (index) => {
     const updatedTrades = trades.filter((_, i) => i !== index);
     setTrades(updatedTrades);
-    localStorage.setItem('trades', JSON.stringify(updatedTrades));
+    localStorage.setItem("trades", JSON.stringify(updatedTrades));
   };
 
   const exportToJSON = () => {
     const dataStr = JSON.stringify(trades, null, 2);
-    const blob = new Blob([dataStr], { type: 'application/json' });
+    const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'pttrades.json';
+    link.download = "pttrades.json";
     link.click();
   };
 
@@ -158,6 +160,17 @@ const Papertrading = () => {
           className="block w-full p-2 mb-4 border rounded"
         />
 
+        <label className="block mb-2">
+          <input
+            type="checkbox"
+            name="enableExitPrice"
+            checked={trade.enableExitPrice}
+            onChange={handleChange}
+            className="mr-2"
+          />
+          Enable Exit Price
+        </label>
+
         <label className="block mb-2">Exit Price</label>
         <input
           type="number"
@@ -165,6 +178,7 @@ const Papertrading = () => {
           value={trade.exitPrice}
           onChange={handleChange}
           className="block w-full p-2 mb-4 border rounded"
+          disabled={!trade.enableExitPrice}
         />
 
         <label className="block mb-2">Profit</label>
@@ -175,33 +189,11 @@ const Papertrading = () => {
           className="block w-full p-2 mb-4 border rounded bg-gray-100"
         />
 
-        <label className="block mb-2">
-          <input
-            type="checkbox"
-            name="targetHit"
-            checked={trade.targetHit}
-            onChange={handleChange}
-            className="mr-2"
-          />
-          Target Hit
-        </label>
-
-        <label className="block mb-2">
-          <input
-            type="checkbox"
-            name="stoplossHit"
-            checked={trade.stoplossHit}
-            onChange={handleChange}
-            className="mr-2"
-          />
-          Stop Loss Hit
-        </label>
-
         <button
           onClick={addOrUpdateTrade}
           className="bg-blue-500 text-white p-2 rounded w-full mb-4"
         >
-          {isEditing ? 'Update Trade' : 'Add Trade'}
+          {isEditing ? "Update Trade" : "Add Trade"}
         </button>
         <button
           onClick={exportToJSON}
@@ -245,10 +237,10 @@ const Papertrading = () => {
                   <strong>Profit:</strong> {t.profit}
                 </p>
                 <p>
-                  <strong>Target Hit:</strong> {t.targetHit ? 'Yes' : 'No'}
+                  <strong>Target Hit:</strong> {t.targetHit ? "Yes" : "No"}
                 </p>
                 <p>
-                  <strong>Stop Loss Hit:</strong> {t.stoplossHit ? 'Yes' : 'No'}
+                  <strong>Stop Loss Hit:</strong> {t.stoplossHit ? "Yes" : "No"}
                 </p>
               </div>
               <div className="flex flex-col space-y-2">

@@ -2,16 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import EntriesTable from './DailyReportenteriesTable';
+import DataEntryForm from '../../Components/DataEntryForm';
 
-const DailyReport = () => {
+const DailyReportsubmit = () => {
   const [reportData, setReportData] = useState([]);
-  // const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
   const fetchReportData = () => {
-    // axios.get('https://crud1-xoqf.onrender.com/repdata')
-    axios.get('https://crud-2-6ptv.onrender.com/api/dailylearningentries')
+    axios.get('http://localhost:5000/repdata')
       .then(response => {
-    
         setReportData(response.data);
       })
       .catch(error => {
@@ -26,9 +24,9 @@ const DailyReport = () => {
   return (
     <div>
   
-      <EntriesTable reportData={reportData} />
+      <DataEntryForm onEntryAdded={fetchReportData} />
     </div>
   );
 };
 
-export default DailyReport;
+export default DailyReportsubmit;

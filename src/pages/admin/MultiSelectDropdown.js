@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import axios from "axios";
-import TableComponent from "./Table";
-import PutCallCalculator from "./PutCallCalculator";
-import Authentication from './Authentication';
+import TableComponent from "../../Components/Table";
+import PutCallCalculator from "../../Components/PutCallCalculator";
+import Authentication from '../../Components/Authentication';
 const MultiSelectDropdowns = () => {
   const [authenticated, setAuthenticated] = useState(false);
 

@@ -1,28 +1,32 @@
 // src/routes/PublicRoutes.js
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import Navbar from './Navbar';
+
 import ProfitLossDisplay from './ProfitLossDisplay';
-import Mhome from './Mhome';
-import RiskReward from './RiskReward';
-import TradingChecklist from './TradingChecklist';
-import ReadVKResistanceBaseLevels from '../Crud/ReadVKResistanceBaseLevels';
-import ImportantPoints from './ImportantPoints';
-import DailyReport from './DailyReport';
-import Tutorials from './Tutotrials';
-import StrategyTable from './StrategyTable';
-import TradersDiary from './TradersDiary';
-import ReadStrategy from './ReadStrategy';
-import Papertrading from './Papertrading';
-import Learntabs from './Learntabs';
-import OptionsTradingCalculatorApp from './OptionsTradingCalculatorApp';
-import OptionsPerformanceTracker from './OptionsPerformanceTracker';
-import Ledger from './dhan/Ledger';
-import OptionTradingStrategy from './OptionsTradingStrategy';
-import TradeTable from './TradeTable';
+import Mhome from '../pages/public/Mhome';
+import RiskReward from '../pages/public/RiskReward';
+import TradingChecklist from '../pages/public/TradingChecklist';
+import ReadVKResistanceBaseLevels from '../pages/public/ReadVKResistanceBaseLevels';
+import ImportantPoints from '../pages/public/ImportantPoints';
+import DailyReport from '../pages/public/DailyReport';
+import Tutorials from '../pages/public/Tutotrials';
+
+import TradersDiary from '../pages/public/TradersDiary';
+import ReadStrategy from '../pages/public/ReadStrategy';
+import Papertrading from '../pages/public/Papertrading';
+import Learntabs from '../pages/public/Learntabs';
+import OptionsTradingCalculatorApp from '../pages/public/OptionsTradingCalculatorApp';
+import OptionsPerformanceTracker from '../pages/public/OptionsPerformanceTracker';
+
+import OptionTradingStrategy from '../pages/public/OptionsTradingStrategy';
+
+
+import TradeTable from '../pages/public/TradeTable';
+import Navbar from './Navbar';
+import MorningTradingPlan from '../pages/public/MorningTradingPlan';
 const PublicRoutes = () => (
   <>
-    <Navbar />
+    <Navbar/>
     {/* <ProfitLossDisplay /> */}
     <Routes>
       <Route path="/" element={<Mhome />} />
@@ -40,6 +44,7 @@ const PublicRoutes = () => (
     <Route path="/optionsperformancetracker" element={<OptionsPerformanceTracker/>} />
     <Route path="/ots" element={<OptionTradingStrategy/>} />
     <Route path="/tradetable" element={<TradeTable/>} />
+    <Route path="/tradingplandata" element={<MorningTradingPlan/>} />
       {/* Add more routes as needed */}
     </Routes>
   </>

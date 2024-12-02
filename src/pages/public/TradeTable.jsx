@@ -1,7 +1,20 @@
-import React from "react";
-import trades from "../json/tradedata.json";
+import React, { useEffect, useState } from "react";
 
 const TradeTable = () => {
+  const [trades, setTrades] = useState([]);
+
+  useEffect(() => {
+    // Fetch the JSON file from the public folder
+    fetch("/json/tradedata.json")
+      .then((response) => response.json())
+      .then((data) => setTrades(data))
+      .catch((error) => console.error("Error fetching trade data:", error));
+  }, []);
+
+  if (!trades || trades.length === 0) {
+    return <div className="text-center text-gray-600">Loading trade data...</div>;
+  }
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Trade Summary</h1>

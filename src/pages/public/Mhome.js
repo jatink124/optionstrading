@@ -3,7 +3,7 @@ import Select from 'react-select'; // Import React Select
 import ChecklistCard from './ChecklistCard';
 import ParentComponent from './ParentComponent';
 import ThingsToAchieveCard from './ThingsToAchieveCard';
-import VKlevels from '../Crud/VKlevels';
+import VKlevels from './VKlevels';
 import Showotstrategy from './Showotstrategy';
 import PredictionCard from './Home/PredictionCard';
 

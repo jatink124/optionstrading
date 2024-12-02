@@ -1,7 +1,7 @@
-import API_BASE_URL from './config';
+import API_BASE_URL from '../admin/config';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ReadModal from './ReadModal';
+import ReadModal from '../../Components/ReadModal';
 
 // Helper function to format a date in YYYY-MM-DD format
 const getFormattedDate = (dateString) => {
