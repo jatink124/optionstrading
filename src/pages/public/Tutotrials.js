@@ -5,6 +5,10 @@ import FAQItem from "../../Components/faq/FaqItem";
 import MarketAnalysis from "./MarketAnalysis";
 import MorningTradingPlan from "./MorningTradingPlan";
 import Webdevmorningplan from "./Webdevmorningplan";
+import Liquidity from "./Liquidity";
+import RiskManagement from "./RiskManagement";
+import CompoundingEffect from "./CompoundingEffect";
+import CompoundingEffect3000 from "./CompoundingEffect3000";
 
 // Import images and videos
 const candleImages = importAll(require.context("./images/candles", false, /\.(jfif)$/));
@@ -131,6 +135,10 @@ const Tutorials = () => {
             {/* <Tab label="Market Analysis" value="market-analysis" /> */}
             <Tab label="Morning Trading Plan" value="morning-trading-plan" />
             <Tab label="Web Dev Morning Plan" value="webdevmorningplan" />
+            <Tab label="Liquidity" value="liquidity" />
+            <Tab label="riskmanagement" value="riskmanagement" />
+            <Tab label="compoundingeffect" value="compoundingeffect" />
+            <Tab label="compoundingeffect3000" value="compoundingeffect3000" />
           </Tabs>
 
           {/* Sub-tab Content */}
@@ -149,6 +157,30 @@ const Tutorials = () => {
           >
             <Webdevmorningplan/>
           </Box>
+          <Box
+            hidden={tradingInsightsSubTab !== "liquidity"}
+            className="mt-4"
+          >
+            <Liquidity/>
+          </Box>
+          <Box
+            hidden={tradingInsightsSubTab !== "riskmanagement"}
+            className="mt-4"
+          >
+            <RiskManagement/>
+            </Box>
+            <Box
+            hidden={tradingInsightsSubTab !== "compoundingeffect"}
+            className="mt-4"
+          >
+           <CompoundingEffect/>
+            </Box>
+            <Box
+            hidden={tradingInsightsSubTab !== "compoundingeffect3000"}
+            className="mt-4"
+          >
+           <CompoundingEffect3000/>
+            </Box>
         </div>
       )}
 

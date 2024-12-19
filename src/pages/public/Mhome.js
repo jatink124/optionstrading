@@ -6,6 +6,7 @@ import ThingsToAchieveCard from './ThingsToAchieveCard';
 import VKlevels from './VKlevels';
 import Showotstrategy from './Showotstrategy';
 import PredictionCard from './Home/PredictionCard';
+import DisplayChecklist from './Displaychecklist';
 
 function Mhome() {
   const [selectedComponents, setSelectedComponents] = useState([]);
@@ -17,6 +18,7 @@ function Mhome() {
     VKlevels,
     Showotstrategy,
     PredictionCard,
+    DisplayChecklist
   };
 
   const options = [
@@ -26,6 +28,7 @@ function Mhome() {
     { value: 'VKlevels', label: 'VK Levels' },
     { value: 'Showotstrategy', label: 'Show OT Strategy' },
     { value: 'PredictionCard', label: 'Prediction Card' },
+    { value: 'DisplayChecklist', label: 'Display Checklist' },
   ];
 
   const handleChange = (selectedOptions) => {

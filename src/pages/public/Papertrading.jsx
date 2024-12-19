@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 const Papertrading = () => {
-  const [trade, setTrade] = useState({
+  const [tradeDetails, setTradeDetails] = useState({
     tradeName: "",
     type: "call",
     index: "Bank Nifty",
@@ -12,63 +12,67 @@ const Papertrading = () => {
     profit: 0,
     targetHit: false,
     stoplossHit: false,
+    probableTarget: "",
+    stoploss: "",
     enableExitPrice: false,
+    dateTime: new Date().toISOString().slice(0, 16),
   });
 
-  const [trades, setTrades] = useState([]);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editIndex, setEditIndex] = useState(null);
+  const [tradesList, setTradesList] = useState([]);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editTradeIndex, setEditTradeIndex] = useState(null);
+  const [sortOption, setSortOption] = useState("");
 
   useEffect(() => {
-    const localData = JSON.parse(localStorage.getItem("trades"));
-    if (localData) {
-      setTrades(localData);
+    const storedTrades = JSON.parse(localStorage.getItem("trades"));
+    if (storedTrades) {
+      setTradesList(storedTrades);
     }
   }, []);
 
   useEffect(() => {
-    calculateProfit();
-  }, [trade.entryPrice, trade.exitPrice]);
+    computeProfit();
+  }, [tradeDetails.entryPrice, tradeDetails.exitPrice]);
 
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setTrade((prev) => ({
-      ...prev,
+    setTradeDetails((prevState) => ({
+      ...prevState,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  const calculateProfit = () => {
-    if (trade.entryPrice && trade.exitPrice) {
-      const profit = (trade.exitPrice - trade.entryPrice) * trade.lotSize - 49;
-      setTrade((prev) => ({
-        ...prev,
-        profit: parseFloat(profit.toFixed(2)),
+  const computeProfit = () => {
+    if (tradeDetails.entryPrice && tradeDetails.exitPrice) {
+      const calculatedProfit = (tradeDetails.exitPrice - tradeDetails.entryPrice) * tradeDetails.lotSize - 49;
+      setTradeDetails((prevState) => ({
+        ...prevState,
+        profit: parseFloat(calculatedProfit.toFixed(2)),
       }));
     }
   };
 
-  const addOrUpdateTrade = () => {
-    if (!trade.entryPrice) {
-      alert("Please enter both Entry Price and Exit Price.");
+  const handleTradeAddOrUpdate = () => {
+    if (!tradeDetails.entryPrice || !tradeDetails.dateTime) {
+      alert("Please fill in all required fields.");
       return;
     }
 
-    if (isEditing) {
-      const updatedTrades = trades.map((t, index) =>
-        index === editIndex ? trade : t
-      );
-      setTrades(updatedTrades);
-      localStorage.setItem("trades", JSON.stringify(updatedTrades));
-      setIsEditing(false);
-      setEditIndex(null);
-    } else {
-      const updatedTrades = [...trades, trade];
-      setTrades(updatedTrades);
-      localStorage.setItem("trades", JSON.stringify(updatedTrades));
-    }
+    const updatedTrades = isEditMode
+      ? tradesList.map((t, index) => (index === editTradeIndex ? tradeDetails : t))
+      : [...tradesList, tradeDetails];
 
-    setTrade({
+    setTradesList(updatedTrades);
+    localStorage.setItem("trades", JSON.stringify(updatedTrades));
+
+    setIsEditMode(false);
+    setEditTradeIndex(null);
+
+    resetTradeForm();
+  };
+
+  const resetTradeForm = () => {
+    setTradeDetails({
       tradeName: "",
       type: "call",
       index: "Bank Nifty",
@@ -79,35 +83,52 @@ const Papertrading = () => {
       profit: 0,
       targetHit: false,
       stoplossHit: false,
+      probableTarget: "",
+      stoploss: "",
       enableExitPrice: false,
+      dateTime: new Date().toISOString().slice(0, 16),
     });
   };
 
-  const editTrade = (index) => {
-    setTrade(trades[index]);
-    setIsEditing(true);
-    setEditIndex(index);
+  const handleTradeEdit = (index) => {
+    setTradeDetails(tradesList[index]);
+    setIsEditMode(true);
+    setEditTradeIndex(index);
   };
 
-  const deleteTrade = (index) => {
-    const updatedTrades = trades.filter((_, i) => i !== index);
-    setTrades(updatedTrades);
+  const handleTradeDelete = (index) => {
+    const updatedTrades = tradesList.filter((_, i) => i !== index);
+    setTradesList(updatedTrades);
     localStorage.setItem("trades", JSON.stringify(updatedTrades));
   };
 
-  const exportToJSON = () => {
-    const dataStr = JSON.stringify(trades, null, 2);
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "pttrades.json";
-    link.click();
+  const handleExportToJSON = () => {
+    const jsonData = JSON.stringify(tradesList, null, 2);
+    const blob = new Blob([jsonData], { type: "application/json" });
+    const downloadUrl = URL.createObjectURL(blob);
+    const downloadLink = document.createElement("a");
+    downloadLink.href = downloadUrl;
+    downloadLink.download = "papertrading_trades.json";
+    downloadLink.click();
   };
 
+  const handleSortTrades = (criteria) => {
+    setSortOption(criteria);
+    const sortedTrades = [...tradesList].sort((a, b) => {
+      if (criteria === "tradeName") return a.tradeName.localeCompare(b.tradeName);
+      if (criteria === "profit") return b.profit - a.profit;
+      if (criteria === "entryPrice") return a.entryPrice - b.entryPrice;
+      if (criteria === "dateTime") {
+        // Sorting by dateTime in descending order for latest first
+        return new Date(b.dateTime) - new Date(a.dateTime);
+      }
+      return 0;
+    });
+    setTradesList(sortedTrades);
+  };
+  
   return (
     <div className="flex p-4 max-w-4xl mx-auto bg-white rounded shadow-lg space-x-4">
-      {/* Form Section */}
       <div className="w-1/2">
         <h2 className="text-2xl font-bold mb-4">Paper Trading App</h2>
 
@@ -115,16 +136,34 @@ const Papertrading = () => {
         <input
           type="text"
           name="tradeName"
-          value={trade.tradeName}
-          onChange={handleChange}
+          value={tradeDetails.tradeName}
+          onChange={handleInputChange}
+          className="block w-full p-2 mb-4 border rounded"
+        />
+
+        <label className="block mb-2">Probable Target</label>
+        <input
+          type="number"
+          name="probableTarget"
+          value={tradeDetails.probableTarget}
+          onChange={handleInputChange}
+          className="block w-full p-2 mb-4 border rounded"
+        />
+
+        <label className="block mb-2">Stoploss</label>
+        <input
+          type="number"
+          name="stoploss"
+          value={tradeDetails.stoploss}
+          onChange={handleInputChange}
           className="block w-full p-2 mb-4 border rounded"
         />
 
         <label className="block mb-2">Type of Trade</label>
         <select
           name="type"
-          value={trade.type}
-          onChange={handleChange}
+          value={tradeDetails.type}
+          onChange={handleInputChange}
           className="block w-full p-2 mb-4 border rounded"
         >
           <option value="call">Call</option>
@@ -134,8 +173,8 @@ const Papertrading = () => {
         <label className="block mb-2">Index</label>
         <select
           name="index"
-          value={trade.index}
-          onChange={handleChange}
+          value={tradeDetails.index}
+          onChange={handleInputChange}
           className="block w-full p-2 mb-4 border rounded"
         >
           <option value="Bank Nifty">Bank Nifty</option>
@@ -146,8 +185,8 @@ const Papertrading = () => {
         <input
           type="number"
           name="lotSize"
-          value={trade.lotSize}
-          onChange={handleChange}
+          value={tradeDetails.lotSize}
+          onChange={handleInputChange}
           className="block w-full p-2 mb-4 border rounded"
         />
 
@@ -155,104 +194,96 @@ const Papertrading = () => {
         <input
           type="number"
           name="entryPrice"
-          value={trade.entryPrice}
-          onChange={handleChange}
+          value={tradeDetails.entryPrice}
+          onChange={handleInputChange}
           className="block w-full p-2 mb-4 border rounded"
         />
-
-        <label className="block mb-2">
-          <input
-            type="checkbox"
-            name="enableExitPrice"
-            checked={trade.enableExitPrice}
-            onChange={handleChange}
-            className="mr-2"
-          />
-          Enable Exit Price
-        </label>
 
         <label className="block mb-2">Exit Price</label>
         <input
           type="number"
           name="exitPrice"
-          value={trade.exitPrice}
-          onChange={handleChange}
+          value={tradeDetails.exitPrice}
+          onChange={handleInputChange}
           className="block w-full p-2 mb-4 border rounded"
-          disabled={!trade.enableExitPrice}
+        />
+
+        <label className="block mb-2">Datetime</label>
+        <input
+          type="datetime-local"
+          name="dateTime"
+          value={tradeDetails.dateTime}
+          onChange={handleInputChange}
+          className="block w-full p-2 mb-4 border rounded"
         />
 
         <label className="block mb-2">Profit</label>
         <input
           type="number"
-          value={trade.profit}
+          value={tradeDetails.profit}
           readOnly
           className="block w-full p-2 mb-4 border rounded bg-gray-100"
         />
 
         <button
-          onClick={addOrUpdateTrade}
+          onClick={handleTradeAddOrUpdate}
           className="bg-blue-500 text-white p-2 rounded w-full mb-4"
         >
-          {isEditing ? "Update Trade" : "Add Trade"}
+          {isEditMode ? "Update Trade" : "Add Trade"}
         </button>
         <button
-          onClick={exportToJSON}
+          onClick={handleExportToJSON}
           className="bg-green-500 text-white p-2 rounded w-full mb-4"
         >
           Export to JSON
         </button>
       </div>
 
-      {/* Trade List Section */}
       <div className="w-1/2">
         <h3 className="text-xl font-bold mb-4">Trade List</h3>
-        {trades.length === 0 ? (
+
+        <div className="mb-4">
+          <label className="block mb-2">Sort By</label>
+          <select
+            onChange={(e) => handleSortTrades(e.target.value)}
+            value={sortOption}
+            className="block w-full p-2 border rounded"
+          >
+            <option value="">Select</option>
+            <option value="tradeName">Trade Name</option>
+            <option value="profit">Profit</option>
+            <option value="entryPrice">Entry Price</option>
+            <option value="dateTime">Date & Time</option>
+          </select>
+        </div>
+
+        {tradesList.length === 0 ? (
           <p className="text-gray-500">No trades added yet.</p>
         ) : (
-          trades.map((t, index) => (
+          tradesList.map((trade, index) => (
             <div
               key={index}
-              className="border p-2 mb-2 rounded flex justify-between items-center"
+              className="border p-4 mb-4 rounded shadow-sm"
             >
-              <div>
-                <p>
-                  <strong>Trade Name:</strong> {t.tradeName}
-                </p>
-                <p>
-                  <strong>Type:</strong> {t.type}
-                </p>
-                <p>
-                  <strong>Index:</strong> {t.index}
-                </p>
-                <p>
-                  <strong>Lot Size:</strong> {t.lotSize}
-                </p>
-                <p>
-                  <strong>Entry Price:</strong> {t.entryPrice}
-                </p>
-                <p>
-                  <strong>Exit Price:</strong> {t.exitPrice}
-                </p>
-                <p>
-                  <strong>Profit:</strong> {t.profit}
-                </p>
-                <p>
-                  <strong>Target Hit:</strong> {t.targetHit ? "Yes" : "No"}
-                </p>
-                <p>
-                  <strong>Stop Loss Hit:</strong> {t.stoplossHit ? "Yes" : "No"}
-                </p>
-              </div>
-              <div className="flex flex-col space-y-2">
+              <h4 className="font-bold">{trade.tradeName}</h4>
+              <p>Type: {trade.type}</p>
+              <p>Index: {trade.index}</p>
+              <p>Lot Size: {trade.lotSize}</p>
+              <p>Entry Price: ₹{trade.entryPrice}</p>
+              <p>Exit Price: ₹{trade.exitPrice}</p>
+              <p>Profit: ₹{trade.profit}</p>
+              <p>Date: {new Date(trade.dateTime).toLocaleString()}</p>
+
+              <div className="flex space-x-2">
                 <button
-                  onClick={() => editTrade(index)}
-                  className="bg-yellow-500 text-white p-1 rounded"
+                  onClick={() => handleTradeEdit(index)}
+                  className="bg-yellow-500 text-white p-2 rounded"
                 >
                   Edit
                 </button>
                 <button
-                  onClick={() => deleteTrade(index)}
-                  className="bg-red-500 text-white p-1 rounded"
+                  onClick={() => handleTradeDelete(index)}
+                  className="bg-red-500 text-white p-2 rounded"
                 >
                   Delete
                 </button>

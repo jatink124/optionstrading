@@ -15,6 +15,7 @@ import EnterTradePredictions from '../pages/admin/EnterTradePredictions';
 import StrategyTable from '../pages/admin/StrategyTable';
 import WebsiteList from '../pages/public/utils/WebsiteList';
 import { websites } from '../pages/public/utils/websitesData';  // Ensure this path is correct
+import Addchecklist from '../pages/admin/Addchecklist';
 const AdminRoutes = () => (
   <>
     <AdminDropdown />
@@ -28,6 +29,7 @@ const AdminRoutes = () => (
       <Route path="/entertradepredicitons" element={<EnterTradePredictions/>} />
       <Route path="/strategytable" element={<StrategyTable/>} />
       <Route path="/websitelist" element={<WebsiteList websites={websites} />} />
+      <Route path="/Addchecklist" element={<Addchecklist/>} />
     </Routes>
   </>
 );
