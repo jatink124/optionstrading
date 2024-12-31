@@ -9,6 +9,7 @@ import Liquidity from "./Liquidity";
 import RiskManagement from "./RiskManagement";
 import CompoundingEffect from "./CompoundingEffect";
 import CompoundingEffect3000 from "./CompoundingEffect3000";
+import SniperMindsetGuide from "./SniperMindset";
 
 // Import images and videos
 const candleImages = importAll(require.context("./images/candles", false, /\.(jfif)$/));
@@ -137,6 +138,7 @@ const Tutorials = () => {
             <Tab label="Web Dev Morning Plan" value="webdevmorningplan" />
             <Tab label="Liquidity" value="liquidity" />
             <Tab label="riskmanagement" value="riskmanagement" />
+            <Tab label="snipermindsetguide" value="snipermindsetguide" />
             <Tab label="compoundingeffect" value="compoundingeffect" />
             <Tab label="compoundingeffect3000" value="compoundingeffect3000" />
           </Tabs>
@@ -168,6 +170,12 @@ const Tutorials = () => {
             className="mt-4"
           >
             <RiskManagement/>
+            </Box>
+            <Box
+            hidden={tradingInsightsSubTab !== "snipermindsetguide"}
+            className="mt-4"
+          >
+         <SniperMindsetGuide/>
             </Box>
             <Box
             hidden={tradingInsightsSubTab !== "compoundingeffect"}
