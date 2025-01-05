@@ -43,7 +43,7 @@ const PublicRoutes = () => (
     <Route path="/optionstradingcalculator" element={<OptionsTradingCalculatorApp/>} />
     <Route path="/optionsperformancetracker" element={<OptionsPerformanceTracker/>} />
     <Route path="/ots" element={<OptionTradingStrategy/>} />
-    <Route path="/tradetable" element={<TradeTable/>} />
+    {/* <Route path="/tradetable" element={<TradeTable/>} /> */}
     <Route path="/tradingplandata" element={<MorningTradingPlan/>} />
       {/* Add more routes as needed */}
     </Routes>
