@@ -38,7 +38,7 @@ const PublicRoutes = () => (
       <Route path="/lessonslearnt" element={<DailyReport/>} />
       <Route path="/tutorials" element={<Tutorials/>} />
     <Route path="/readstrategy" element={<ReadStrategy/>} />
-    <Route path="/tradersdiary" element={<TradersDiary />} />
+    {/* <Route path="/tradersdiary" element={<TradersDiary />} /> */}
     <Route path="/papertrading" element={<Papertrading/>} />
     <Route path="/optionstradingcalculator" element={<OptionsTradingCalculatorApp/>} />
     <Route path="/optionsperformancetracker" element={<OptionsPerformanceTracker/>} />
