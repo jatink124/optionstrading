@@ -24,6 +24,11 @@ import OptionTradingStrategy from '../pages/public/OptionsTradingStrategy';
 import TradeTable from '../pages/public/TradeTable';
 import Navbar from './Navbar';
 import MorningTradingPlan from '../pages/public/MorningTradingPlan';
+import TwentyoneEMAComponent from '../pages/public/TwentyoneEMAComponent';
+import EMACrossoverComponent from '../pages/public/EMACrossoverComponent';
+import RSIandEMAStrategy from '../pages/public/Rsiemastrategy';
+import EMAAnalysis from '../pages/public/EMAAnalysis';
+import CompoundingInTrading from '../pages/public/Compoundingintrading';
 const PublicRoutes = () => (
   <>
     <Navbar/>
@@ -43,8 +48,13 @@ const PublicRoutes = () => (
     <Route path="/optionstradingcalculator" element={<OptionsTradingCalculatorApp/>} />
     <Route path="/optionsperformancetracker" element={<OptionsPerformanceTracker/>} />
     <Route path="/ots" element={<OptionTradingStrategy/>} />
+    <Route path="/21emacomponent" element={<TwentyoneEMAComponent/>} />
+    <Route path="/emacrossover" element={<EMACrossoverComponent/>} />
+    <Route path="/rsiemastrategy" element={<RSIandEMAStrategy/>} />
     {/* <Route path="/tradetable" element={<TradeTable/>} /> */}
     <Route path="/tradingplandata" element={<MorningTradingPlan/>} />
+    <Route path="/50emaanalysis" element={<EMAAnalysis/>} />
+    <Route path="/compoundingintrading" element={<CompoundingInTrading/>} />
       {/* Add more routes as needed */}
     </Routes>
   </>

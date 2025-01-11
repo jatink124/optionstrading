@@ -11,6 +11,11 @@ import CompoundingEffect from "./CompoundingEffect";
 import CompoundingEffect3000 from "./CompoundingEffect3000";
 import SniperMindsetGuide from "./SniperMindset";
 import OptionsTradingAccumulation from "./OptionsTradingAccumulation";
+import TwentyoneEMAComponent from "./TwentyoneEMAComponent";
+import EMACrossoverComponent from "./EMACrossoverComponent";
+import RSIandEMAStrategy from "./Rsiemastrategy";
+import EMAAnalysis from "./EMAAnalysis";
+import CompoundingInTrading from "./Compoundingintrading";
 
 // Import images and videos
 const candleImages = importAll(require.context("./images/candles", false, /\.(jfif)$/));
@@ -143,6 +148,11 @@ const Tutorials = () => {
             <Tab label="compoundingeffect" value="compoundingeffect" />
             <Tab label="compoundingeffect3000" value="compoundingeffect3000" />
             <Tab label="otaccumulation" value="otaccumulation" />
+            <Tab label="21emacomponent" value="21emacomponent" />
+            <Tab label="emacrossover" value="emacrossover" />
+            <Tab label="rsiemastrategy" value="rsiemastrategy" />
+            <Tab label="50emaanalysis" value="50emaanalysis" />
+            <Tab label="compoundingintrading" value="compoundingintrading" />
           </Tabs>
 
           {/* Sub-tab Content */}
@@ -191,6 +201,36 @@ const Tutorials = () => {
             className="mt-4"
           >
           <OptionsTradingAccumulation/>
+            </Box>
+            <Box
+            hidden={tradingInsightsSubTab !== "21emacomponent"}
+            className="mt-4"
+          >
+          <TwentyoneEMAComponent/>
+            </Box>
+            <Box
+            hidden={tradingInsightsSubTab !== "emacrossover"}
+            className="mt-4"
+          >
+        <EMACrossoverComponent/>
+            </Box>
+            <Box
+            hidden={tradingInsightsSubTab !== "rsiemastrategy"}
+            className="mt-4"
+          >
+       <RSIandEMAStrategy/>
+            </Box>
+            <Box
+            hidden={tradingInsightsSubTab !== "50emaanalysis"}
+            className="mt-4"
+          >
+      <EMAAnalysis/>
+            </Box>
+            <Box
+            hidden={tradingInsightsSubTab !== "compoundingintrading"}
+            className="mt-4"
+          >
+   <CompoundingInTrading/>
             </Box>
         </div>
       )}
